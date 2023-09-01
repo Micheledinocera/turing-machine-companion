@@ -5,6 +5,7 @@
 .nitro
 .cache
 dist
+assets/imgs
 
 # Node dependencies
 node_modules

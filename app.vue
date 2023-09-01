@@ -16,5 +16,5 @@ body
 .layout-container
   #layout-content
     height: calc(100vh - 2*$base-height)
-    background-color: lightblue
+    background-color: $primary-color-light
 </style>

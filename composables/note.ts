@@ -24,12 +24,12 @@ export const EMPTY_LAW={
 export const EMPTY_LAWS=Utils.LAW_KEYS.map(lawKey=>({...EMPTY_LAW,key:lawKey})) as Law[]
 
 export const EMPTY_NOTE_ROW={
-    code:[],
+    code:[1,1,1],
     verificators:[]
 } as NoteRow
 
 export const EMPTY_NOTE={
-    noteRows:[],
+    noteRows:[structuredClone(EMPTY_NOTE_ROW)],
     possibleCodes:[[],[],[]],
     laws:EMPTY_LAWS
 } as Note
