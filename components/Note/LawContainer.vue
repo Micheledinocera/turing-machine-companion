@@ -1,5 +1,5 @@
 <template>
-    <Note />
+    LawContainer
 </template>
 
 <script setup lang="ts"></script>

@@ -11,7 +11,7 @@
 <style lang="sass">
 body
   margin: 0
-  font-family: Poppins
+  font-family: Rajdhani
   font-weight: 500
 .layout-container
   #layout-content

@@ -1,5 +1,5 @@
 <template>
-    <Note />
+    VerificationsChecklist
 </template>
 
 <script setup lang="ts"></script>

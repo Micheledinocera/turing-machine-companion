@@ -11,5 +11,9 @@
   "devDependencies": {
     "@nuxt/devtools": "latest",
     "nuxt": "^3.7.0"
+  },
+  "dependencies": {
+    "sass": "^1.66.1",
+    "vue3-perfect-scrollbar": "^1.6.1"
   }
 }
