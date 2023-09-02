@@ -35,3 +35,4 @@ export const EMPTY_NOTE={
 } as Note
 
 export const useNote = () => useState<Note>('note',()=>EMPTY_NOTE)
+export const useSelectedRowNote = () => useState<number>('selectedRowNote',()=>0)

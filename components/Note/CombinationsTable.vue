@@ -1,9 +1,11 @@
 <template>
     <div class="combinations-table">
         <div class="row header">
+            <div class="select-row"> </div>
             <div class="item" v-for="i in Utils.arrayFromZeroToNumber(3)" :key="'header_'+i"> </div>
         </div>
-        <div :class="['row',{'inactive':rowIndex<noteRows.length-1}]" v-for="(noteRow,rowIndex) in noteRows">
+        <div :class="['row',{'inactive':rowIndex!=selectedRowNote}]" v-for="(noteRow,rowIndex) in noteRows">
+            <div class="select-row" @click="()=>selectedRowNote=rowIndex"></div>
             <template v-for="menuIndex in Utils.arrayFromZeroToNumber(3)" :key="'item_'+noteRow.code[menuIndex]+'_'+menuIndex">
                 <div class="item" @click="()=>showMenu(menuIndex)"> 
                     <div class="value"> {{ noteRow.code[menuIndex] }} </div>
@@ -20,6 +22,7 @@
 import { NoteRow } from '~/composables/note';
 
 const note=useNote()
+const selectedRowNote=useSelectedRowNote()
 const noteRows=computed(()=>note.value.noteRows as NoteRow[])
 const showMenuArray=ref([false,false,false])
 
@@ -48,28 +51,41 @@ $height-row:50px
         font-weight: 700
         font-size: 16px
         &.inactive
-            cursor: auto
-            pointer-events: none
+            font-weight: 500
             .choice-menu
                 display: none
+            .select-row
+                background-color: white
+                cursor: pointer
+            .item
+                pointer-events: none
+                cursor: auto
+        .select-row
+            width: 20px
+            height: $height-row
+            background-color: $primary-color
+            cursor: auto
         &.header
             .item
                 background-position: center
                 background-size: 20px
                 background-repeat: no-repeat
                 cursor: auto
-                &:nth-child(1)
-                    background-image: url('~/assets/imgs/triangle.svg')
                 &:nth-child(2)
-                    background-image: url('~/assets/imgs/square.svg')
+                    background-image: url('~/assets/imgs/triangle.svg')
                 &:nth-child(3)
+                    background-image: url('~/assets/imgs/square.svg')
+                &:nth-child(4)
                     background-image: url('~/assets/imgs/circle.svg')
+            .select-row
+                background-color: transparent
+                cursor: auto
         .item
             width: 33%
             cursor: pointer
             text-align: center
             display: grid
-            &:nth-child(1),&:nth-child(2)
+            &:nth-child(2),&:nth-child(3)
                 border-right: solid 2px $primary-color
             .value
                 height: $height-row

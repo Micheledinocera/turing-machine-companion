@@ -13,9 +13,13 @@
 </template>
 
 <script setup lang="ts">
-const note=useNote()
+
+const note=useNote();
+const selectedRowNote=useSelectedRowNote();
+
 const addEmptyNote=()=>{
     note.value.noteRows=[...note.value.noteRows,structuredClone(EMPTY_NOTE_ROW)];
+    selectedRowNote.value=note.value.noteRows.length-1;
 }
 </script>
 
