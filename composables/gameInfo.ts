@@ -7,7 +7,7 @@ export interface GameInfo {
     status:string,
 }
 
-export const useGameInfo= async () => {
+export const useGetGameInfo= async () => {
 
     const getGameInfo = async (code : string) => {
         const url='https://turingmachine.info/api/api.php?h='+code;
@@ -17,3 +17,5 @@ export const useGameInfo= async () => {
 
     return{ getGameInfo}
 }
+
+export const useGameInfo = () => useState<GameInfo|null>('gameInfo')

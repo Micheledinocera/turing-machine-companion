@@ -20,12 +20,10 @@
 </template>
 
 <script setup lang="ts">
-import { GameInfo } from '~/composables/gameInfo';
-
 const gameCode=ref("");
 const pendingGameInfo=ref(false);
-let gameInfo=ref(null) as Ref<GameInfo|null>;
-const { getGameInfo }=await useGameInfo();
+const gameInfo=useGameInfo();
+const { getGameInfo }=await useGetGameInfo();
 const note=useNote();
 const gameInfoOk=useGameInfoOk();
 const selectedRowNote=useSelectedRowNote();
@@ -42,7 +40,7 @@ const addEmptyNote=()=>{
 const getInfo=async ()=>{
     // B5GXSX
     pendingGameInfo.value=true;
-    gameInfo=await getGameInfo(gameCode.value) as Ref<GameInfo|null>;
+    gameInfo.value=(await getGameInfo(gameCode.value)).value;
     pendingGameInfo.value=false;
     if(gameInfo.value?.status=='bad') gameInfoOk.value=false
     else gameInfoOk.value=true

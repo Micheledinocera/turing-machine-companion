@@ -1,6 +1,6 @@
 <template>
     <div class="laws-container">
-        <div class="law-item" v-for="(law,lawIndex) in note.laws">
+        <div class="law-item" v-for="(law,lawIndex) in note.laws" v-if="!gameInfoOk">
             <div class="key"> {{ law.key }} </div>
             <div class="text-container">
                 <input type="text" v-model="inputValues[lawIndex]">
@@ -17,12 +17,36 @@
                 <div class="value"> {{ activePossibilities(lawIndex)[0].value }} </div>
             </div>
         </div>
+        <div class="law-item" v-for="(law,lawIndex) in gameInfo?.ind" v-else>
+            <div class="key"> {{ Object.keys(LawType)[lawIndex] }} </div>
+            <div class="conditions-container with-imgs">
+                <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!note.laws[lawIndex].possibilities[possibilityIndex].active}]" v-for="(possibility,possibilityIndex) in Utils.LAWS_VERIFICATORS[law]">
+                    <img :class="['condition']" :src="'_nuxt/assets/law-imgs/'+possibility+'_Mini_IT.jpg'" alt="" @click="()=>toggleActive(lawIndex,possibilityIndex)">
+                </div>
+            </div>
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { LawType } from '#imports';
+
 const note=useNote();
+const gameInfoOk=useGameInfoOk();
+const gameInfo=useGameInfo();
 const inputValues=ref(Object.values(LawType).map(()=>""));
+
+watch(gameInfoOk,()=>{
+    if(gameInfoOk){
+        note.value.laws=[];
+        gameInfo.value?.ind.forEach((law,lawIndex)=>{
+            note.value.laws.push({key:Object.keys(LawType)[lawIndex] as LawType,possibilities:[]})
+            Utils.LAWS_VERIFICATORS[law].forEach((verificator:number)=>{
+                note.value.laws[lawIndex].possibilities.push({value:""+verificator,active:true});
+            })
+        })
+    }
+})
 
 const addCondition=(lawIndex:number)=>{
     note.value.laws[lawIndex].possibilities.push({value:inputValues.value[lawIndex],active:true});
@@ -62,6 +86,8 @@ $small-item-height:12px
     .law-item
         width: calc(100%/3 - 8px)
         margin: 10px auto
+        @media (max-width: $breakpoint-tablet)
+            width: calc(100%/2 - 8px)
         .key
             text-align: center
             font-weight: 700
@@ -88,6 +114,21 @@ $small-item-height:12px
                     opacity: 0.5
                     pointer-events: none
         .conditions-container
+            &.with-imgs
+                .condition-container
+                    border: none
+                    cursor: pointer
+                    &.definitive
+                        border: solid 2px $primary-color
+                    &.inactive
+                        border: none
+                        text-decoration: line-through
+                        opacity: 0.5
+                    img
+                        width: 100%
+                        height: 50px
+                        object-fit: contain
+
             .condition-container
                 border-radius: 8px
                 border: solid 2px $primary-color
