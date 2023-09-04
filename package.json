@@ -1,5 +1,5 @@
 {
-  "name": "Turing Machine Companion",
+  "name": "turing-machine-companion",
   "private": true,
   "scripts": {
     "build": "nuxt build",
