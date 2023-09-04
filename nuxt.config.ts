@@ -23,5 +23,11 @@ export default defineNuxtConfig({
   },
   app: {
     baseURL: development? "/" : "/turing-machine-companion/"
+  },
+  modules: ['@vite-pwa/nuxt'],
+  pwa: {
+    name: "Turing Machine Companion",
+    themeColor: "#2db563",
+    msTileColor: "#000000",
   }
 })

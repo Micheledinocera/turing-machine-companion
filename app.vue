@@ -1,5 +1,6 @@
 <template>
   <div :class="['layout-container']">
+    <VitePwaManifest />
     <NuxtLayout>
       <perfect-scrollbar id="layout-content">  
         <NuxtPage/>
