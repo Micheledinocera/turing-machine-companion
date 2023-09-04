@@ -40,9 +40,8 @@ const updateCode=(menuIndex:number,rowIndex:number,value:number)=>{
 </script>
 
 <style scoped lang="sass">
-$height-row:50px
 .combinations-table
-    width: 40vw
+    width: $left-width
     margin-left: 10px
     .row
         display: flex

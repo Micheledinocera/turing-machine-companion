@@ -7,7 +7,7 @@ export interface Law{
 
 export interface NoteRow{
     code: number[],
-    verificators: boolean[]
+    verificators: boolean[]|null[]
 }
 
 export interface Note {
@@ -25,7 +25,7 @@ export const EMPTY_LAWS=Utils.LAW_KEYS.map(lawKey=>({...EMPTY_LAW,key:lawKey})) 
 
 export const EMPTY_NOTE_ROW={
     code:[1,1,1],
-    verificators:[]
+    verificators:[null,null,null,null,null,null]
 } as NoteRow
 
 export const EMPTY_NOTE={
