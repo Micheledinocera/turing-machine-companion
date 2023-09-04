@@ -1,5 +1,6 @@
 <template>
   <div :class="['layout-container']">
+    <Modal v-if="showModal"/>
     <NuxtLayout>
       <NuxtScrollbar  id="layout-content">  
         <NuxtPage/>
@@ -9,6 +10,7 @@
 </template>
 
 <script setup lang="ts">
+const showModal=useShowModal();
 
 onMounted(()=> {
   window.addEventListener("beforeunload", (event) => {

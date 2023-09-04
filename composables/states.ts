@@ -1,1 +1,1 @@
-export const usePage = () => useState<number>('page', () => 1)
+export const useShowModal = () => useState<boolean>('showModal', () => false)

@@ -1,13 +1,13 @@
 <template>
     <div class="header">
-        <div class="logo">
+        <div class="logo" @click="showModal=true">
             <div class="companion"> COMPANION </div>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
-
+const showModal=useShowModal();
 </script>
 
 <style scoped lang="sass">
