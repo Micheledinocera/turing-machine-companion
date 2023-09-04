@@ -1,4 +1,7 @@
 <template>
+    <Head>
+        <Title> Turing Machine Companion </Title>
+    </Head>
     <Note />
 </template>
 

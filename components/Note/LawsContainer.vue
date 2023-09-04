@@ -2,7 +2,6 @@
     <div class="laws-container">
         <div class="law-item" v-for="law in note.laws">
             <div class="key"> {{ law.key }} </div>
-            
         </div>
     </div>
 </template>
