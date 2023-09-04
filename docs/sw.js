@@ -1,1 +1,58 @@
-if(!self.define){let e,n={};const r=(r,i)=>(r=new URL(r+".js",i).href,n[r]||new Promise((n=>{if("document"in self){const e=document.createElement("script");e.src=r,e.onload=n,document.head.appendChild(e)}else e=r,importScripts(r),n()})).then((()=>{let e=n[r];if(!e)throw new Error(`Module ${r} didn’t register its module`);return e})));self.define=(i,s)=>{const l=e||("document"in self?document.currentScript.src:"")||location.href;if(n[l])return;let u={};const o=e=>r(e,l),t={module:{uri:l},exports:u,require:o};n[l]=Promise.all(i.map((e=>t[e]||o(e)))).then((e=>(s(...e),u)))}}define(["./workbox-27b29e6f"],(function(e){"use strict";self.addEventListener("message",(e=>{e.data&&"SKIP_WAITING"===e.data.type&&self.skipWaiting()})),e.precacheAndRoute([{url:"_nuxt/default.57d07644.css",revision:null},{url:"_nuxt/default.d48f3093.js",revision:null},{url:"_nuxt/entry.76827f1a.css",revision:null},{url:"_nuxt/entry.a2707d81.js",revision:null},{url:"_nuxt/error-404.7fc72018.css",revision:null},{url:"_nuxt/error-404.911f9bb6.js",revision:null},{url:"_nuxt/error-500.7168a3b2.js",revision:null},{url:"_nuxt/error-500.c5df6088.css",revision:null},{url:"_nuxt/index.16bf5e1c.js",revision:null},{url:"_nuxt/index.c75e13c5.css",revision:null},{url:"_nuxt/workbox-window.prod.es5.a7b12eab.js",revision:null},{url:"200",revision:"d2b115b007d162f1cf6cf130469e5a53"},{url:"404",revision:"d2b115b007d162f1cf6cf130469e5a53"},{url:"/turing-machine-companion/",revision:"e3e1b910ad9871c7eca2c58c38688657"},{url:"manifest.webmanifest",revision:"4e1f3ec6f820089f4efb7df67483ca0b"}],{}),e.cleanupOutdatedCaches(),e.registerRoute(new e.NavigationRoute(e.createHandlerBoundToURL("index.html")))}));
+const options = {"autoRegister":true,"cacheOptions":{"directoryIndex":"/","revision":"ieitPkJssliI"},"enabled":true,"preCaching":[],"templatePath":null,"workboxVersion":"6.5.3","workboxUrl":"https://storage.googleapis.com/workbox-cdn/releases/6.5.3/workbox-sw.js"}
+
+importScripts(options.workboxUrl)
+
+self.addEventListener('install', () => self.skipWaiting())
+self.addEventListener('activate', () => self.clients.claim())
+
+const { registerRoute } = workbox.routing
+const { NetworkFirst, StaleWhileRevalidate, CacheFirst } = workbox.strategies
+const { CacheableResponsePlugin } = workbox.cacheableResponse
+const { ExpirationPlugin } = workbox.expiration
+const { precacheAndRoute } = workbox.precaching
+
+// Cache page navigations (html) with a Network First strategy
+registerRoute(
+  ({ request }) => {
+    return request.mode === 'navigate'
+  },
+  new NetworkFirst({
+    cacheName: 'pages',
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [200] })
+    ]
+  })
+)
+
+// Cache Web Manifest, CSS, JS, and Web Worker requests with a Stale While Revalidate strategy
+registerRoute(
+  ({ request }) =>
+    request.destination === 'manifest' ||
+    request.destination === 'style' ||
+    request.destination === 'script' ||
+    request.destination === 'worker',
+  new StaleWhileRevalidate({
+    cacheName: 'assets',
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [200] })
+    ]
+  })
+)
+
+// Cache images with a Cache First strategy
+registerRoute(
+  ({ request }) => request.destination === 'image',
+  new CacheFirst({
+    cacheName: 'images',
+    plugins: [
+      new CacheableResponsePlugin({ statuses: [200] }),
+      // 50 entries max, 30 days max
+      new ExpirationPlugin({ maxEntries: 50, maxAgeSeconds: 60 * 60 * 24 * 30 })
+    ]
+  })
+)
+
+// Precaching
+if (options.preCaching.length) {
+  precacheAndRoute(options.preCaching, options.cacheOptions)
+}
