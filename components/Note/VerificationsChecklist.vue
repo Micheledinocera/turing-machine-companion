@@ -2,10 +2,10 @@
     <div class="verifications-checklist">
         <div class="table-container">
             <div class="row header">
-                <div class="item" v-for="letter in Utils.LAW_KEYS"> <div class="label"> {{ letter }} </div> </div>
+                <div class="item" v-for="letter in Object.values(LawType)"> <div class="label"> {{ letter }} </div> </div>
             </div>
             <div :class="['row',{'inactive':rowIndex!=selectedRowNote}]" v-for="(noteRow,rowIndex) in noteRows">
-                <div class="item" v-for="(letter,verificatorIndex) in Utils.LAW_KEYS" :key="'verificator_'+letter+'_'+rowIndex">
+                <div class="item" v-for="(letter,verificatorIndex) in Object.values(LawType)" :key="'verificator_'+letter+'_'+rowIndex">
                     <div :class="['checkbox',checkboxClass(noteRow.verificators[verificatorIndex]),{inactive:inactive(noteRow.verificators[verificatorIndex],rowIndex)}]" @click="()=>updateVerificator(rowIndex,verificatorIndex,noteRow.verificators[verificatorIndex])"> </div>
                 </div>
         </div>
@@ -61,7 +61,6 @@ const updateVerificator=(rowIndex:number,verificatorIndex:number,value: boolean|
             margin: auto
             .label,.checkbox
                 margin: auto
-                cursor: pointer
             .checkbox
                 width: 20px
                 height: 20px
@@ -70,6 +69,7 @@ const updateVerificator=(rowIndex:number,verificatorIndex:number,value: boolean|
                 border: solid 1px black
                 background-position: center
                 background-size: contain
+                cursor: pointer
                 &.ok
                     background-image: url('~/assets/imgs/ok.png')
                 &.ko

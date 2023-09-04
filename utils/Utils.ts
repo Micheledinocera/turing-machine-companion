@@ -1,5 +1,5 @@
 export default class Utils{
-  static LAW_KEYS=["A","B","C","D","E","F"];
+  static SHAPES=["triangle","square","circle"];
   static VERIFICATOR_STATES=[null,true,false];
 
   static arrayFromOneToNumber(n:number){

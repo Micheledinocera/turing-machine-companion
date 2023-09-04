@@ -7,7 +7,7 @@
         <div :class="['row',{'inactive':rowIndex!=selectedRowNote}]" v-for="(noteRow,rowIndex) in noteRows">
             <div class="select-row" @click="()=>selectedRowNote=rowIndex"></div>
             <template v-for="menuIndex in Utils.arrayFromZeroToNumber(3)" :key="'item_'+noteRow.code[menuIndex]+'_'+menuIndex">
-                <div class="item" @click="()=>showMenu(menuIndex)"> 
+                <div :class="['item',Utils.SHAPES[menuIndex]]" @click="()=>showMenu(menuIndex)"> 
                     <div class="value"> {{ noteRow.code[menuIndex] }} </div>
                     <div class="choice-menu" v-if="showMenuArray[menuIndex]">
                         <div class="menu-item" v-for="value in Utils.arrayFromOneToNumber(5)" @click.stop="()=>updateCode(menuIndex,rowIndex,value)"> {{ value }} </div>
@@ -84,6 +84,18 @@ const updateCode=(menuIndex:number,rowIndex:number,value:number)=>{
             cursor: pointer
             text-align: center
             display: grid
+            &.triangle
+                color:$blue
+                .choice-menu .menu-item:hover
+                    background-color: $blue
+            &.square
+                color:$yellow
+                .choice-menu .menu-item:hover
+                    background-color: $yellow
+            &.circle
+                color:$purple
+                .choice-menu .menu-item:hover
+                    background-color: $purple
             &:nth-child(2),&:nth-child(3)
                 border-right: solid 2px $primary-color
             .value
@@ -97,8 +109,8 @@ const updateCode=(menuIndex:number,rowIndex:number,value:number)=>{
                 z-index: 1
                 .menu-item
                     background-color: white
+                    padding: 10px 0
                     &:hover
                         color: white
-                        background-color: $primary-color-dark
     
 </style>

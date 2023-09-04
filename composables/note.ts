@@ -1,8 +1,20 @@
-import Utils from "~/utils/Utils"
+export enum LawType{
+    A="A",
+    B="B",
+    C="C",
+    D="D",
+    E="E",
+    F="F"
+}
+
+export interface Possibility {
+    value: string,
+    active:boolean
+}
 
 export interface Law{
-    key:"A"|"B"|"C"|"D"|"E"|"F",
-    possibilities:string[]
+    key:LawType,
+    possibilities:Possibility[]
 }
 
 export interface NoteRow{
@@ -21,7 +33,7 @@ export const EMPTY_LAW={
     possibilities:[]
 } as Law
 
-export const EMPTY_LAWS=Utils.LAW_KEYS.map(lawKey=>({...EMPTY_LAW,key:lawKey})) as Law[]
+export const EMPTY_LAWS=Object.values(LawType).map(lawKey=>({...structuredClone(EMPTY_LAW),key:lawKey})) as Law[]
 
 export const EMPTY_NOTE_ROW={
     code:[1,1,1],

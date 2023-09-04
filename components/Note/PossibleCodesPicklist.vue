@@ -1,10 +1,10 @@
 <template>
     <div class="possible-codes-picklist">
         <div class="row header">
-            <div class="item" v-for="position in Utils.arrayFromZeroToNumber(3)"> </div>
+            <div class="item" v-for="shape in Utils.SHAPES"> </div>
         </div>
         <div class="row" v-for="value in Utils.arrayFromOneToNumber(5)">
-            <div :class="['item',{inactive:isInactive(value,position)}]" v-for="position in Utils.arrayFromZeroToNumber(3)" @click="()=>setCode(value,position)"> 
+            <div :class="['item',{inactive:isInactive(value,position)},Utils.SHAPES[position]]" v-for="position in Utils.arrayFromZeroToNumber(3)" @click="()=>setCode(value,position)"> 
                 <div class="value"> {{value}} </div> 
             </div>
         </div>
@@ -40,7 +40,6 @@ const setCode=(value:number,position:number)=>{
     .row
         display: flex
         height: calc($height-row/2)
-        margin-left: 20px
         margin-top: 8px
         &.header
             .item
@@ -60,10 +59,24 @@ const setCode=(value:number,position:number)=>{
             display: flex
             cursor: pointer
             height: 100%
+            color: white
             .value
                 display: flex
                 align-items: center
                 margin: auto
+            &.triangle
+                background-color: $blue
+                &.inactive
+                    color: $blue
+                    
+            &.square
+                background-color:$yellow
+                &.inactive
+                    color: $yellow
+            &.circle
+                background-color:$purple
+                &.inactive
+                    color: $purple
             &.inactive
                 opacity: 0.25
                 background-color: white
