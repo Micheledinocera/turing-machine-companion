@@ -15,11 +15,13 @@
 const showModal=useShowModal();
 const selectedRowNote=useSelectedRowNote();
 const note=useNote();
+const gameInfoOk=useGameInfoOk();
 
 const newGame=()=>{
     note.value=structuredClone(EMPTY_NOTE);
     selectedRowNote.value=0;
     showModal.value=false;
+    gameInfoOk.value=null;
 }
 </script>
 
