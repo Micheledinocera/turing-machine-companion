@@ -1,7 +1,7 @@
 <template>
   <div :class="['layout-container']">
     <NuxtLayout>
-      <perfect-scrollbar id="layout-content">  
+      <perfect-scrollbar class="scrollbar" id="layout-content">  
         <NuxtPage/>
       </perfect-scrollbar>
     </NuxtLayout>
