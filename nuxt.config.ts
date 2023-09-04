@@ -25,6 +25,7 @@ export default defineNuxtConfig({
     baseURL: development? "/" : "/turing-machine-companion/"
   },
   modules: [
-    '@kevinmarrec/nuxt-pwa'
+    '@kevinmarrec/nuxt-pwa',
+    '@davestewart/nuxt-scrollbar'
   ]
 })

@@ -1,9 +1,11 @@
 <template>
   <div :class="['layout-container']">
     <NuxtLayout>
-      <perfect-scrollbar class="scrollbar" id="layout-content">  
+      <NuxtScrollbar  id="layout-content">  
+      <div id="layout-content">  
         <NuxtPage/>
-      </perfect-scrollbar>
+      </div>
+      </NuxtScrollbar >
     </NuxtLayout>
   </div>
 </template>
