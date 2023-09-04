@@ -37,6 +37,8 @@ const setCode=(value:number,position:number)=>{
     padding: 10px 0
     border: solid 2px $primary-color
     border-radius: 8px
+    @media (max-width: $breakpoint-tablet)
+        width: calc(100% - 20px)
     .row
         display: flex
         height: calc($height-row/2)

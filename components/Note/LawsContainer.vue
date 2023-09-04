@@ -49,15 +49,19 @@ const inactiveAdd=(lawIndex:number)=>{
 
 <style scoped lang="sass">
 $item-height:20px
+$small-item-height:12px
 .laws-container
     margin-top: 20px
     width: calc($right-width - 80px)
     padding: 0 40px
     display: flex
     flex-wrap: wrap
+    @media (max-width: $breakpoint-tablet)
+        width: calc(100% - 40px)
+        padding: 0 20px
     .law-item
         width: calc(100%/3 - 8px)
-        margin: 0 auto
+        margin: 10px auto
         .key
             text-align: center
             font-weight: 700
@@ -88,23 +92,24 @@ $item-height:20px
                 border-radius: 8px
                 border: solid 2px $primary-color
                 display: flex
-                line-height: $item-height
+                line-height: $small-item-height
                 margin-top: 10px
                 padding: 6px
                 .remove
-                    height: $item-height
+                    height: $small-item-height
                     border-radius: 20px
                     color: white
                     font-weight: 600
-                    font-size: 24px
+                    font-size: $small-item-height
                     background-color: $red
-                    width: 20px
+                    width: $small-item-height
                     cursor: pointer
                     text-align: center
                 .condition
                     width: calc(100% - 30px)
                     margin-left: 10px
                     cursor: pointer
+                    font-size: $small-item-height
                     &.inactive
                         text-decoration: line-through
                         opacity: 0.5

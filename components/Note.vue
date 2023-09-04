@@ -46,4 +46,6 @@ const addEmptyNote=()=>{
             pointer-events: none
     .row
         display: flex
+        @media (max-width: $breakpoint-tablet)
+            display: block
 </style>

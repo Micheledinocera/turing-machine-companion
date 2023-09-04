@@ -43,6 +43,8 @@ const updateCode=(menuIndex:number,rowIndex:number,value:number)=>{
 .combinations-table
     width: $left-width
     margin-left: 10px
+    @media (max-width: $breakpoint-tablet)
+        width: calc(100% - 20px)
     .row
         display: flex
         height: $height-row

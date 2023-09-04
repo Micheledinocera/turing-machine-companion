@@ -44,6 +44,9 @@ const updateVerificator=(rowIndex:number,verificatorIndex:number,value: boolean|
 .verifications-checklist
     width: calc($right-width - 80px)
     padding: 0 40px
+    @media (max-width: $breakpoint-tablet)
+        width: calc(100% - 20px)
+        padding: 0 10px
     .row
         display: flex
         font-weight: 700
@@ -54,6 +57,8 @@ const updateVerificator=(rowIndex:number,verificatorIndex:number,value: boolean|
         &.inactive
             .item
                 pointer-events: none
+                .checkbox
+                    border: none
         .item
             width: 16%
             display: flex
@@ -66,7 +71,7 @@ const updateVerificator=(rowIndex:number,verificatorIndex:number,value: boolean|
                 height: 20px
                 background-color: white
                 border-radius: 4px
-                border: solid 1px black
+                border: solid 2px $primary-color-dark
                 background-position: center
                 background-size: contain
                 cursor: pointer
