@@ -3,8 +3,8 @@
         <div class="add-container">
             <div class="game-info">
                 <input type="text" placeholder="Game Code" v-model="gameCode">
-                <Loader v-if="pendingGameInfo" />
-                <div class="get-info" @click="getInfo" v-else> {{buttonLabel}} </div>
+                <div class="loader-container" v-if="pendingGameInfo"> <Loader/> </div>
+                <div :class="['get-info',{inactive:gameCode==''}]" @click="getInfo" v-else> {{buttonLabel}} </div>
             </div>
             <div :class="['add',{inactive:inactive}]" @click="addEmptyNote"> New Note Row </div>
         </div>
@@ -38,7 +38,6 @@ const addEmptyNote=()=>{
 }
 
 const getInfo=async ()=>{
-    // B5GXSX
     pendingGameInfo.value=true;
     gameInfo.value=(await getGameInfo(gameCode.value)).value;
     pendingGameInfo.value=false;
@@ -61,11 +60,15 @@ const buttonLabel=computed(()=>{
     .add-container
         display: flex
         height: calc($base-height/2)
-        margin: auto 10px
+        margin: 10px
         .game-info
             display: flex
             input
-                width: 70px
+                width: 80px
+            .loader-container
+                display: flex
+                align-items: center
+                margin-left: 10px
             .get-info
                 margin-left: 10px
                 width: fit-content
@@ -77,6 +80,9 @@ const buttonLabel=computed(()=>{
                 border-radius: 8px
                 &:hover
                     background-color: $primary-color-dark
+                &.inactive
+                    opacity: 0.5
+                    pointer-events: none
         .add
             margin-left: auto
             width: fit-content
@@ -95,4 +101,6 @@ const buttonLabel=computed(()=>{
         display: flex
         @media (max-width: $breakpoint-tablet)
             display: block
+        &:last-child
+            margin-bottom: 80px
 </style>

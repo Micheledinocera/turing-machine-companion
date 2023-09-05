@@ -72,8 +72,7 @@ const updateVerificator=(rowIndex:number,verificatorIndex:number,value: boolean|
                 background-color: white
                 border-radius: 4px
                 border: solid 2px $primary-color-dark
-                background-position: center
-                background-size: contain
+                @include background-standard
                 cursor: pointer
                 &.ok
                     background-image: url('~/assets/imgs/ok.png')

@@ -10,7 +10,10 @@
 </template>
 
 <script setup lang="ts">
+import { ORIENTATIONS } from './utils/Utils';
+
 const showModal=useShowModal();
+const orientation=useOrientation();
 
 onMounted(()=> {
   window.addEventListener("beforeunload", (event) => {
@@ -19,6 +22,13 @@ onMounted(()=> {
     // Chrome requires returnValue to be set.
     event.returnValue = "";
   });
+
+  orientation.value=screen.orientation.type as ORIENTATIONS;
+  window.addEventListener("orientationchange", () => {
+    orientation.value=screen.orientation.type as ORIENTATIONS;
+  });
+  
+  document.addEventListener("backbutton", function(){}, false);
 })
 </script>
 

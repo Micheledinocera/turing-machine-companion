@@ -43,7 +43,7 @@ export const EMPTY_NOTE_ROW={
 export const EMPTY_NOTE={
     noteRows:[structuredClone(EMPTY_NOTE_ROW)],
     possibleCodes:[[],[],[]],
-    laws:EMPTY_LAWS
+    laws:structuredClone(EMPTY_LAWS)
 } as Note
 
 export const useNote = () => useState<Note>('note',()=>EMPTY_NOTE)

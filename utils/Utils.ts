@@ -50,12 +50,17 @@ export default class Utils{
     46:[46,49,47,50,48,51],
     47:[40,49,41,50,42,51],
     48:[139,89,92,140,90,93,141,91,95]
-  }
-
+  } as Record<number,number[]>
+  
   static arrayFromOneToNumber(n:number){
     return Array.from({length: n}, (_, i) => i + 1) as number[]
   }
   static arrayFromZeroToNumber(n:number){
     return Array.from({length: n}, (_, i) => i) as number[]
   }
+}
+
+export enum ORIENTATIONS{
+  vertical="portrait-primary",
+  horizontal="landscape-primary",
 }

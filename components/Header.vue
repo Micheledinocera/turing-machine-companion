@@ -15,10 +15,8 @@ const showModal=useShowModal();
     @include header-row
     display: flex
     .logo
+        @include background-standard
         background-image: url('~/assets/imgs/logo.png')
-        background-size: contain
-        background-repeat: no-repeat
-        background-position: center
         width: auto
         height: 100%
         margin: auto

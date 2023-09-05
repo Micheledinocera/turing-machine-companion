@@ -68,9 +68,8 @@ const updateCode=(menuIndex:number,rowIndex:number,value:number)=>{
             cursor: auto
         &.header
             .item
-                background-position: center
+                @include background-standard
                 background-size: 20px
-                background-repeat: no-repeat
                 cursor: auto
                 &:nth-child(2)
                     background-image: url('~/assets/imgs/triangle.svg')

@@ -57,7 +57,7 @@ const newGame=()=>{
             text-align: center
         .buttons
             display: flex
-            width: 50%
+            width: 70%
             margin: 40px auto
             >div
                 margin: auto
