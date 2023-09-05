@@ -31,8 +31,10 @@ export default defineNuxtConfig({
   pwa: {
     manifest: {
       name: 'Turing Machine Companion',
+      short_name: 'Turing Machine Companion',
       theme_color: "#2db563",
-      msTileColor: "#2db563"
+      background_color: "#2db563",
+      display: "fullscreen"
     }
   }
 })
