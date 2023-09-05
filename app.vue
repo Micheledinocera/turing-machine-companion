@@ -27,8 +27,11 @@ onMounted(()=> {
   window.addEventListener("orientationchange", () => {
     orientation.value=screen.orientation.type as ORIENTATIONS;
   });
-  
-  document.addEventListener("backbutton", function(){}, false);
+
+  window.addEventListener('popstate', (e) => {
+      e.preventDefault();
+      window.history.forward();
+  });
 })
 </script>
 
