@@ -23,13 +23,18 @@ onMounted(()=> {
     event.returnValue = "";
   });
 
-  orientation.value=screen.orientation.type as ORIENTATIONS;
-  window.addEventListener("orientationchange", () => {
-    orientation.value=screen.orientation.type as ORIENTATIONS;
+  orientation.value=window.outerWidth>768?ORIENTATIONS.horizontal:ORIENTATIONS.vertical;
+  window.addEventListener("resize", () => {
+    orientation.value=window.outerWidth>768?ORIENTATIONS.horizontal:ORIENTATIONS.vertical;
+  });
+
+  window.addEventListener('load', function() {
+    window.history.pushState({ noBackExitsApp: true }, '')
   });
 
   window.addEventListener('popstate', (e) => {
       e.preventDefault();
+      if (e.state && e.state.noBackExitsApp) window.history.pushState({ noBackExitsApp: true }, '')
       window.history.forward();
   });
 })
