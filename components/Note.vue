@@ -2,11 +2,11 @@
     <div class="note-container">
         <div class="add-container">
             <div class="game-info">
-                <input type="text" placeholder="Game Code" v-model="gameCode">
+                <input type="text" :placeholder="t('gameCode')" v-model="gameCode">
                 <div class="loader-container" v-if="pendingGameInfo"> <Loader/> </div>
                 <div :class="['get-info',{inactive:gameCode==''}]" @click="getInfo" v-else> {{buttonLabel}} </div>
             </div>
-            <div :class="['add',{inactive:inactive}]" @click="addEmptyNote"> New Note Row </div>
+            <div :class="['add',{inactive:inactive}]" @click="addEmptyNote"> {{t('newNoteRow')}} </div>
         </div>
         <div class="row">
             <CombinationsTable />
@@ -27,6 +27,7 @@ const { getGameInfo }=await useGetGameInfo();
 const note=useNote();
 const gameInfoOk=useGameInfoOk();
 const selectedRowNote=useSelectedRowNote();
+const { t } = useI18n();
 
 const inactive=computed(()=>
     note.value.noteRows.some(row=>row.verificators.filter(verificator=>verificator!==null).length<3)
@@ -48,8 +49,9 @@ const getInfo=async ()=>{
 
 const buttonLabel=computed(()=>{
     if(gameInfoOk.value === null)
-        return 'GET INFO'
-    return gameInfoOk.value?'OK':'KO'
+        // return t('test', { var1: 'Ciao' })
+        return t('getInfo')
+    return gameInfoOk.value?t('ok'):t('ko')
 })
 
 </script>

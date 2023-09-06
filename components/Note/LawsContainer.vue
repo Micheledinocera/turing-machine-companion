@@ -21,8 +21,7 @@
             <div class="key"> {{ Object.keys(LawType)[lawIndex] }} </div>
             <div class="conditions-container with-imgs">
                 <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!note.laws[lawIndex].possibilities[possibilityIndex].active}]" v-for="(possibility,possibilityIndex) in Utils.LAWS_VERIFICATORS[law]">
-                    <img :class="['condition']" :src="'https://turingmachine.info/images/laws//IT/'+possibility+'_Mini_IT.jpg'" alt="" @click="()=>toggleActive(lawIndex,possibilityIndex)">
-                    <!-- <img :class="['condition']" :src="'_nuxt/assets/law-imgs/'+possibility+'_Mini_IT.jpg'" alt="" @click="()=>toggleActive(lawIndex,possibilityIndex)"> -->
+                    <img :class="['condition']" :src="'https://turingmachine.info/images/laws//'+$i18n.locale.toUpperCase()+'/'+possibility+'_Mini_'+$i18n.locale.toUpperCase()+'.jpg'" alt="" @click="()=>toggleActive(lawIndex,possibilityIndex)">
                 </div>
             </div>
         </div>

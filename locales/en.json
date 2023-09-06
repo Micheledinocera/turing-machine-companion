@@ -1,0 +1,8 @@
+{
+    "test": "eng test {var1}",
+    "getInfo": "Download Info",
+    "gameCode": "Game Code",
+    "newNoteRow": "New Line",
+    "ok": "Okay",
+    "ko": "KO"
+  }

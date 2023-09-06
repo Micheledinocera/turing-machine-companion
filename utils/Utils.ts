@@ -1,5 +1,18 @@
 export default class Utils{
   static SHAPES=["triangle","square","circle"];
+  static LANGUAGES=[
+    {value:"it",label:"Italiano"},
+    {value:"fr",label:"Français"},
+    {value:"en",label:"English"},
+    {value:"de",label:"Deutsch"},
+    {value:"hu",label:"Magyar"},
+    {value:"br",label:"Português"},
+    {value:"pl",label:"Polski"},
+    {value:"jp",label:"日本語"},
+    {value:"kr",label:"한국어"},
+    {value:"cns",label:"简体中文"},
+    {value:"cnt",label:"繁體中文"}
+  ];
   static VERIFICATOR_STATES=[null,true,false];
   static LAWS_VERIFICATORS={
     1:[1,16],

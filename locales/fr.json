@@ -1,0 +1,8 @@
+{
+  "test": "c'est un test {var1}",
+  "getInfo": "Télécharger les informations",
+  "gameCode": "Code de jeu",
+  "newNoteRow": "Nouvelle ligne",
+  "ok": "D'accord",
+  "ko": "Erreur"
+}

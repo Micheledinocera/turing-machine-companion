@@ -1,5 +1,8 @@
 <template>
     <div class="header">
+        <select v-model="$i18n.locale"> 
+            <option v-for="language in Utils.LANGUAGES" :value="language.value"> {{ language.label }} </option>
+        </select> 
         <div class="logo" @click="showModal=true">
             <div class="companion"> COMPANION </div>
         </div>
@@ -14,6 +17,11 @@ const showModal=useShowModal();
 .header
     @include header-row
     display: flex
+    select
+        position: absolute
+        right: 10px
+        border: none
+        cursor: pointer
     .logo
         @include background-standard
         background-image: url('~/assets/imgs/logo.png')

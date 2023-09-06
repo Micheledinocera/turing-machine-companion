@@ -14,6 +14,7 @@ import { ORIENTATIONS } from './utils/Utils';
 
 const showModal=useShowModal();
 const orientation=useOrientation();
+const { locale }= useI18n();
 
 onMounted(()=> {
   window.addEventListener("beforeunload", (event) => {
@@ -28,15 +29,26 @@ onMounted(()=> {
     orientation.value=window.outerWidth>768?ORIENTATIONS.horizontal:ORIENTATIONS.vertical;
   });
 
-  window.addEventListener('load', function() {
-    window.history.pushState({ noBackExitsApp: true }, '')
-  });
+  // window.addEventListener('load', function() {
+  //   window.history.pushState({ noBackExitsApp: true }, '')
+  // });
 
   window.addEventListener('popstate', (e) => {
       e.preventDefault();
-      if (e.state && e.state.noBackExitsApp) window.history.pushState({ noBackExitsApp: true }, '')
+      // if (e.state && e.state.noBackExitsApp) window.history.pushState({ noBackExitsApp: true }, '')
       window.history.forward();
   });
+
+  if (Utils.LANGUAGES.map((item) => item.value).includes(navigator.language))
+    locale.value = navigator.language;
+  else {
+    var lan = navigator.language.substring(0, 2);
+    var filteredLang = Utils.LANGUAGES.filter((item) =>
+      item.value.startsWith(lan)
+    );
+    locale.value =
+      filteredLang.length > 0 ? filteredLang[0].value : "en";
+  }
 })
 </script>
 
