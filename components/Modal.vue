@@ -2,26 +2,43 @@
     <div class="modal-overlay" @click="showModal=false">
         <div class="modal-content" @click.stop="">
             <div class="close" @click="showModal=false"> X </div>
-            <div class="title"> {{$t('newGame')}} </div>
-            <div class="buttons">
-                <div class="cancel" @click="showModal=false"> {{$t('cancel')}} </div>
-                <div class="ok" @click="()=>newGame()"> {{$t('ok')}} </div>
-            </div>
+            <template v-if="modalType==MODAL_TYPES.newGame">
+                <div class="title"> {{$t('newGame')}} </div>
+                <div class="buttons">
+                    <div class="cancel" @click="showModal=false"> {{$t('cancel')}} </div>
+                    <div class="ok" @click="()=>newGame()"> {{$t('ok')}} </div>
+                </div>
+            </template>
+            <template v-else-if="modalType==MODAL_TYPES.cardDetail">
+                <div class="img-container">
+                    <img :src="getLawImageUrlLocale(selectedCard)" alt="">
+                </div>
+            </template>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
 const showModal=useShowModal();
+const modalType=useModalType();
+const selectedCard=useSelectedCard();
 const selectedRowNote=useSelectedRowNote();
 const note=useNote();
 const gameInfoOk=useGameInfoOk();
+const { locale }= useI18n();
 
 const newGame=()=>{
     note.value=structuredClone(EMPTY_NOTE);
     selectedRowNote.value=0;
     showModal.value=false;
     gameInfoOk.value=null;
+}
+
+const getLawImageUrlLocale=(lawId:number)=>{
+    const lawIdString=(lawId<10?"0":"")+lawId;
+    const lang=LANGUAGES.find(lang=>lang.iso==locale.value);
+    const localeValue=lang?lang.value:"en";
+    return LAW_IMG_URL.replaceAll('{locale}',localeValue.toUpperCase()).replace('{lawId}',lawIdString)
 }
 </script>
 
@@ -35,7 +52,7 @@ const newGame=()=>{
     background-color: rgba(0,0,0,0.5)
     z-index: 1
     .modal-content
-        width: 50%
+        width: 70%
         height: auto
         background-color: white
         margin: auto
@@ -46,7 +63,7 @@ const newGame=()=>{
         font-size: 24px
         .close
             position: absolute
-            margin-left: calc( 50% - 14px)
+            margin-left: calc(70% - 14px)
             margin-top: -4px
             cursor: pointer
             color: $red
@@ -58,7 +75,7 @@ const newGame=()=>{
         .buttons
             display: flex
             width: 70%
-            margin: 40px auto
+            margin: 40px auto 20px
             >div
                 margin: auto
                 color: white
@@ -69,5 +86,6 @@ const newGame=()=>{
                     background-color: $primary-color
                 &.cancel
                     background-color: $red
-                
+        .img-container img
+            width: 100%
 </style>

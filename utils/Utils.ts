@@ -16,6 +16,10 @@ export enum ORIENTATIONS{
   vertical="portrait-primary",
   horizontal="landscape-primary",
 };
+export enum MODAL_TYPES{
+  newGame="new-game",
+  cardDetail="card-detail",
+};
 export const VERIFICATOR_STATES=[null,true,false];
 export const LAWS_VERIFICATORS={
   1:[1,16],
@@ -68,6 +72,7 @@ export const LAWS_VERIFICATORS={
   48:[139,89,92,140,90,93,141,91,95]
 } as Record<number,number[]>
 export const IMG_URL='https://turingmachine.info/images/laws//{locale}/{possibility}_Mini_{locale}.jpg';
+export const LAW_IMG_URL='https://turingmachine.info/images/criteriacards/{locale}/TM_GameCards_{locale}-{lawId}.png';
 
 export const arrayFromOneToNumber=(n:number)=>{
   return Array.from({length: n}, (_, i) => i + 1) as number[]
@@ -75,3 +80,6 @@ export const arrayFromOneToNumber=(n:number)=>{
 export const arrayFromZeroToNumber=(n:number)=>{
   return Array.from({length: n}, (_, i) => i) as number[]
 }
+
+// con due codici diversi consecutivi si rompe
+// new game non funziona

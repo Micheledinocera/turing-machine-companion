@@ -3,7 +3,7 @@
         <select v-model="$i18n.locale"> 
             <option v-for="language in LANGUAGES" :value="language.iso"> {{ language.label }} </option>
         </select> 
-        <div class="logo" @click="showModal=true">
+        <div class="logo" @click="()=>{showModal=true;modalType=MODAL_TYPES.newGame}">
             <div class="companion"> COMPANION </div>
         </div>
     </div>
@@ -11,6 +11,7 @@
 
 <script setup lang="ts">
 const showModal=useShowModal();
+const modalType=useModalType();
 </script>
 
 <style scoped lang="sass">

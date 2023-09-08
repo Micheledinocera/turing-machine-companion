@@ -39,6 +39,7 @@ const addEmptyNote=()=>{
 }
 
 const getInfo=async ()=>{
+    gameInfoOk.value=null;
     pendingGameInfo.value=true;
     gameInfo.value=(await getGameInfo(gameCode.value)).value;
     pendingGameInfo.value=false;
