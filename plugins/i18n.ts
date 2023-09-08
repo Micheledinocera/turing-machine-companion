@@ -1,15 +1,14 @@
 import { createI18n } from 'vue-i18n'
 import it from '../locales/it.json'
 import en from '../locales/en.json'
-import br from '../locales/br.json'
+import pt from '../locales/pt.json'
 import de from '../locales/de.json'
 import fr from '../locales/fr.json'
 import hu from '../locales/hu.json'
-import jp from '../locales/jp.json'
-import kr from '../locales/kr.json'
+import ja from '../locales/ja.json'
+import ko from '../locales/ko.json'
 import pl from '../locales/pl.json'
-import cnt from '../locales/cnt.json'
-import cns from '../locales/cns.json'
+import zh from '../locales/zh.json'
 
 export default defineNuxtPlugin(({ vueApp }) => {
   const i18n = createI18n({
@@ -22,12 +21,11 @@ export default defineNuxtPlugin(({ vueApp }) => {
       de,
       fr,
       hu,
-      jp,
-      kr,
+      ja,
+      ko,
       pl,
-      cnt,
-      cns,
-      br
+      zh,
+      pt
     }
   })
 

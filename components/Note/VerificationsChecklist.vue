@@ -33,9 +33,9 @@ const inactive=(value: boolean|null,rowIndex:number)=>{
 }
 
 const updateVerificator=(rowIndex:number,verificatorIndex:number,value: boolean|null)=>{
-    let stateIndex=Utils.VERIFICATOR_STATES.indexOf(value);
-    stateIndex=(stateIndex+1+Utils.VERIFICATOR_STATES.length)%Utils.VERIFICATOR_STATES.length;
-    note.value.noteRows[rowIndex].verificators[verificatorIndex]=Utils.VERIFICATOR_STATES[stateIndex];
+    let stateIndex=VERIFICATOR_STATES.indexOf(value);
+    stateIndex=(stateIndex+1+VERIFICATOR_STATES.length)%VERIFICATOR_STATES.length;
+    note.value.noteRows[rowIndex].verificators[verificatorIndex]=VERIFICATOR_STATES[stateIndex];
 }
 
 </script>

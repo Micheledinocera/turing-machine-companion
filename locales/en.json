@@ -1,8 +1,11 @@
 {
-    "test": "eng test {var1}",
-    "getInfo": "Download Info",
-    "gameCode": "Game Code",
-    "newNoteRow": "New Line",
-    "ok": "Okay",
-    "ko": "KO"
-  }
+  "getInfo": "Download Info",
+  "gameCode": "Game Code",
+  "newNoteRow": "New Line",
+  "ok": "OK",
+  "ko": "Mistake",
+  "yes": "Yes",
+  "cancel": "Cancel",
+  "newGame": "New game?",
+  "tmc":"Turing Machine Companion"
+}

@@ -1,7 +1,7 @@
 <template>
     <div class="header">
         <select v-model="$i18n.locale"> 
-            <option v-for="language in Utils.LANGUAGES" :value="language.value"> {{ language.label }} </option>
+            <option v-for="language in LANGUAGES" :value="language.iso"> {{ language.label }} </option>
         </select> 
         <div class="logo" @click="showModal=true">
             <div class="companion"> COMPANION </div>

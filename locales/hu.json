@@ -1,7 +1,10 @@
 {
-    "getInfo": "Letöltés Info",
-    "gameCode": "Játék kód",
-    "newNoteRow": "Új sor",
-    "ok": "oké",
-    "ko": "Hiba"
-  }
+  "getInfo": "Letöltés Info",
+  "gameCode": "Játék kód",
+  "newNoteRow": "Új sor",
+  "ok": "oké",
+  "ko": "Hiba",
+  "yes": "Igen",
+  "cancel": "Megszünteti",
+  "newGame": "Új játék?"
+}

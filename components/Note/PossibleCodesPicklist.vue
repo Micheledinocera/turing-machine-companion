@@ -2,10 +2,10 @@
     <div :class="['possible-codes-picklist',{collapsed:orientation==ORIENTATIONS.vertical && isCollapsed}]">
         <div class="collapse" @click="isCollapsed=!isCollapsed"> <div class="icon"> </div> </div>
         <div class="row header">
-            <div class="item" v-for="shape in Utils.SHAPES"> </div>
+            <div class="item" v-for="shape in SHAPES"> </div>
         </div>
-        <div class="row" v-for="value in Utils.arrayFromOneToNumber(5)">
-            <div :class="['item',{inactive:isInactive(value,position)},Utils.SHAPES[position]]" v-for="position in Utils.arrayFromZeroToNumber(3)" @click="()=>setCode(value,position)"> 
+        <div class="row" v-for="value in arrayFromOneToNumber(5)">
+            <div :class="['item',{inactive:isInactive(value,position)},SHAPES[position]]" v-for="position in arrayFromZeroToNumber(3)" @click="()=>setCode(value,position)"> 
                 <div class="value"> {{value}} </div> 
             </div>
         </div>

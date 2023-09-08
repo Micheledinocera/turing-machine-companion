@@ -2,15 +2,15 @@
     <div class="combinations-table">
         <div class="row header">
             <div class="select-row"> </div>
-            <div class="item" v-for="i in Utils.arrayFromZeroToNumber(3)" :key="'header_'+i"> </div>
+            <div class="item" v-for="i in arrayFromZeroToNumber(3)" :key="'header_'+i"> </div>
         </div>
         <div :class="['row',{'inactive':rowIndex!=selectedRowNote}]" v-for="(noteRow,rowIndex) in noteRows">
             <div class="select-row" @click="()=>selectedRowNote=rowIndex"></div>
-            <template v-for="menuIndex in Utils.arrayFromZeroToNumber(3)" :key="'item_'+noteRow.code[menuIndex]+'_'+menuIndex">
-                <div :class="['item',Utils.SHAPES[menuIndex]]" @click="()=>showMenu(menuIndex)"> 
+            <template v-for="menuIndex in arrayFromZeroToNumber(3)" :key="'item_'+noteRow.code[menuIndex]+'_'+menuIndex">
+                <div :class="['item',SHAPES[menuIndex]]" @click="()=>showMenu(menuIndex)"> 
                     <div class="value"> {{ noteRow.code[menuIndex] }} </div>
                     <div class="choice-menu" v-if="showMenuArray[menuIndex]">
-                        <div class="menu-item" v-for="value in Utils.arrayFromOneToNumber(5)" @click.stop="()=>updateCode(menuIndex,rowIndex,value)"> {{ value }} </div>
+                        <div class="menu-item" v-for="value in arrayFromOneToNumber(5)" @click.stop="()=>updateCode(menuIndex,rowIndex,value)"> {{ value }} </div>
                     </div>
                 </div>
             </template>

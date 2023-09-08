@@ -2,10 +2,10 @@
     <div class="modal-overlay" @click="showModal=false">
         <div class="modal-content" @click.stop="">
             <div class="close" @click="showModal=false"> X </div>
-            <div class="title"> New Game? </div>
+            <div class="title"> {{$t('newGame')}} </div>
             <div class="buttons">
-                <div class="ok" @click="()=>newGame()"> OK </div>
-                <div class="cancel" @click="showModal=false"> Cancel </div>
+                <div class="cancel" @click="showModal=false"> {{$t('cancel')}} </div>
+                <div class="ok" @click="()=>newGame()"> {{$t('ok')}} </div>
             </div>
         </div>
     </div>
@@ -62,7 +62,7 @@ const newGame=()=>{
             >div
                 margin: auto
                 color: white
-                padding: 0 8px
+                padding: 4px 14px
                 border-radius: 8px
                 cursor: pointer
                 &.ok

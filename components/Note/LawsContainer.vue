@@ -20,8 +20,8 @@
         <div class="law-item" v-for="(law,lawIndex) in gameInfo?.ind" v-else>
             <div class="key"> {{ Object.keys(LawType)[lawIndex] }} </div>
             <div class="conditions-container with-imgs">
-                <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!note.laws[lawIndex].possibilities[possibilityIndex].active}]" v-for="(possibility,possibilityIndex) in Utils.LAWS_VERIFICATORS[law]">
-                    <img :class="['condition']" :src="'https://turingmachine.info/images/laws//'+$i18n.locale.toUpperCase()+'/'+possibility+'_Mini_'+$i18n.locale.toUpperCase()+'.jpg'" alt="" @click="()=>toggleActive(lawIndex,possibilityIndex)">
+                <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!note.laws[lawIndex].possibilities[possibilityIndex].active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[law]">
+                    <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)">
                 </div>
             </div>
         </div>
@@ -35,13 +35,14 @@ const note=useNote();
 const gameInfoOk=useGameInfoOk();
 const gameInfo=useGameInfo();
 const inputValues=ref(Object.values(LawType).map(()=>""));
+const { locale }= useI18n();
 
 watch(gameInfoOk,()=>{
     note.value.laws=[];
     if(gameInfoOk.value){
         gameInfo.value?.ind.forEach((law,lawIndex)=>{
             note.value.laws.push({key:Object.keys(LawType)[lawIndex] as LawType,possibilities:[]})
-            Utils.LAWS_VERIFICATORS[law].forEach((verificator:number)=>{
+            LAWS_VERIFICATORS[law].forEach((verificator:number)=>{
                 note.value.laws[lawIndex].possibilities.push({value:""+verificator,active:true});
             })
         })
@@ -71,6 +72,11 @@ const inactiveAdd=(lawIndex:number)=>{
     return inputValues.value[lawIndex]==='' || note.value.laws[lawIndex].possibilities.find(possibility=>possibility.value==inputValues.value[lawIndex])
 }
 
+const getImageUrlLocale=(possibility:number)=>{
+    const lang=LANGUAGES.find(lang=>lang.iso==locale.value);
+    const localeValue=lang?lang.value:"en";
+    return IMG_URL.replaceAll('{locale}',localeValue.toUpperCase()).replace('{possibility}',possibility+"")
+}
 </script>
 
 <style scoped lang="sass">

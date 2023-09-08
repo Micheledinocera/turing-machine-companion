@@ -17,38 +17,28 @@ const orientation=useOrientation();
 const { locale }= useI18n();
 
 onMounted(()=> {
-  window.addEventListener("beforeunload", (event) => {
-    // Cancel the event as stated by the standard.
-    event.preventDefault();
-    // Chrome requires returnValue to be set.
-    event.returnValue = "";
-  });
 
-  orientation.value=window.outerWidth>768?ORIENTATIONS.horizontal:ORIENTATIONS.vertical;
-  window.addEventListener("resize", () => {
-    orientation.value=window.outerWidth>768?ORIENTATIONS.horizontal:ORIENTATIONS.vertical;
-  });
-
-  // window.addEventListener('load', function() {
-  //   window.history.pushState({ noBackExitsApp: true }, '')
-  // });
-
-  window.addEventListener('popstate', (e) => {
-      e.preventDefault();
-      // if (e.state && e.state.noBackExitsApp) window.history.pushState({ noBackExitsApp: true }, '')
-      window.history.forward();
-  });
-
-  if (Utils.LANGUAGES.map((item) => item.value).includes(navigator.language))
+  if (LANGUAGES.map((item) => item.iso).includes(navigator.language))
     locale.value = navigator.language;
   else {
     var lan = navigator.language.substring(0, 2);
-    var filteredLang = Utils.LANGUAGES.filter((item) =>
-      item.value.startsWith(lan)
-    );
-    locale.value =
-      filteredLang.length > 0 ? filteredLang[0].value : "en";
+    var filteredLang = LANGUAGES.find((item) => item.iso.startsWith(lan) );
+    locale.value = filteredLang ? filteredLang.iso : "en";
   }
+
+  orientation.value=window.innerWidth>768?ORIENTATIONS.horizontal:ORIENTATIONS.vertical;
+
+  window.addEventListener("beforeunload", (event) => {
+    event.preventDefault();
+    event.returnValue = "";
+  });
+  window.addEventListener("resize", () => {
+    orientation.value=window.innerWidth>768?ORIENTATIONS.horizontal:ORIENTATIONS.vertical;
+  });
+  window.addEventListener('popstate', (e) => {
+      e.preventDefault();
+      window.history.forward();
+  });
 })
 </script>
 

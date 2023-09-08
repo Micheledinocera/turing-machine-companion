@@ -1,8 +1,10 @@
 {
-    "test": "Ita-Test {var1}",
-    "getInfo": "Informationen herunterladen",
-    "gameCode": "Spielcode",
-    "newNoteRow": "Neue Zeile",
-    "ok": "Okay",
-    "ko": "Fehler"
-  }
+  "getInfo": "Informationen herunterladen",
+  "gameCode": "Spielcode",
+  "newNoteRow": "Neue Zeile",
+  "ok": "OK",
+  "ko": "Fehler",
+  "yes": "Ja",
+  "cancel": "Stornieren",
+  "newGame": "Neues Spiel?"
+}

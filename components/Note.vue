@@ -4,7 +4,7 @@
             <div class="game-info">
                 <input type="text" :placeholder="t('gameCode')" v-model="gameCode">
                 <div class="loader-container" v-if="pendingGameInfo"> <Loader/> </div>
-                <div :class="['get-info',{inactive:gameCode==''}]" @click="getInfo" v-else> {{buttonLabel}} </div>
+                <div :class="['get-info',{inactive:gameCode==''},{error:!gameInfoOk}]" @click="getInfo" v-else> {{buttonLabel}} </div>
             </div>
             <div :class="['add',{inactive:inactive}]" @click="addEmptyNote"> {{t('newNoteRow')}} </div>
         </div>
@@ -48,8 +48,7 @@ const getInfo=async ()=>{
 }
 
 const buttonLabel=computed(()=>{
-    if(gameInfoOk.value === null)
-        // return t('test', { var1: 'Ciao' })
+    if(gameInfoOk.value === null || gameCode.value.length>0)
         return t('getInfo')
     return gameInfoOk.value?t('ok'):t('ko')
 })
@@ -85,6 +84,8 @@ const buttonLabel=computed(()=>{
                 &.inactive
                     opacity: 0.5
                     pointer-events: none
+                    &.error
+                        background-color: $red
         .add
             margin-left: auto
             width: fit-content
