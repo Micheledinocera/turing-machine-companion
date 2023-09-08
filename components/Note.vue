@@ -2,7 +2,7 @@
     <div class="note-container">
         <div class="add-container">
             <div class="game-info">
-                <input type="text" :placeholder="t('gameCode')" v-model="gameCode">
+                <input type="text" :placeholder="t('gameCode')" v-model="gameCode" @keydown.enter="getInfo">
                 <div class="loader-container" v-if="pendingGameInfo"> <Loader/> </div>
                 <div :class="['get-info',{inactive:gameCode==''},{error:!gameInfoOk}]" @click="getInfo" v-else> {{buttonLabel}} </div>
             </div>

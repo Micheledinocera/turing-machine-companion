@@ -30,20 +30,20 @@
                 <img :src="getLawImageUrlLocale(law)" alt="">
             </div>
             <div class="conditions-container with-imgs">
-                <template v-if="LAWS_VERIFICATORS[law].length%3==0">
+                <!-- <template v-if="LAWS_VERIFICATORS[law].length%3==0">
                     <div class="row" v-for="counter in arrayFromZeroToNumber((LAWS_VERIFICATORS[law].length/3)+1)">
                         <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!note.laws[lawIndex].possibilities[possibilityIndex+counter*3]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[law].filter((_,i)=>Math.floor(i/3)==counter)">
                             <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex+counter*3)">
                         </div>    
                     </div>
-                </template>
-                <template v-else>
-                    <div class="row" v-for="counter in arrayFromZeroToNumber((LAWS_VERIFICATORS[law].length/2)+1)">
+                </template> -->
+                <!-- <template v-else> -->
+                    <div class="row" v-for="counter in arrayFromZeroToNumber(Math.ceil((LAWS_VERIFICATORS[law].length/2))+1)">
                         <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!note.laws[lawIndex].possibilities[possibilityIndex+counter*2]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[law].filter((_,i)=>Math.floor(i/2)==counter)">
                             <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex+counter*2)">
-                        </div>    
+                        </div>
                     </div>
-                </template>
+                <!-- </template> -->
             </div>
         </div>
     </div>
@@ -208,6 +208,7 @@ $small-item-height:12px
                 .condition-container
                     border: none
                     cursor: pointer
+                    overflow: hidden
                     &.definitive
                         border: solid 2px $primary-color
                     &.inactive
@@ -215,19 +216,18 @@ $small-item-height:12px
                         text-decoration: line-through
                         opacity: 0.5
                     img
-                        width: 100%
-                        // height: 50px
-                        object-fit: contain
+                        width: calc(100% - 10px)
+                        transform: scale(1.2)
                         &.condition
                             margin-left: 0
-
+                            max-height: 35.5px
             .condition-container
                 border-radius: 8px
                 border: solid 2px $primary-color
                 display: flex
                 line-height: $small-item-height
                 margin-top: 10px
-                padding: 6px
+                padding: 6px 2px
                 .remove
                     height: $small-item-height
                     border-radius: 20px
