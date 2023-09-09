@@ -13,6 +13,7 @@
                 <div class="title"> {{$t('credits')}} </div>
                 <div class="line"> {{ $t('madeWithLove') }} <a href="mailto:mdinocera.digital@gmail.com" target="_blank"> Michele Di Nocera </a> </div>
                 <div class="line"> {{ $t('allCreditsTo') }} <a href="https://www.scorpionmasque.com/" target="_blank"> Scorpion Masqué </a> </div>
+                <div class="line"> {{ $t('moreInfo') }} <a href="https://www.turingmachine.info/" target="_blank"> {{ $t('here') }} </a> </div>
             </template>
             <template v-else-if="modalType==MODAL_TYPES.cardDetail">
                 <div class="img-container">
