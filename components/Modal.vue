@@ -9,6 +9,11 @@
                     <div class="ok" @click="()=>newGame()"> {{$t('ok')}} </div>
                 </div>
             </template>
+            <template v-if="modalType==MODAL_TYPES.credits">
+                <div class="title"> {{$t('credits')}} </div>
+                <div class="line"> {{ $t('madeWithLove') }} <a href="mailto:mdinocera.digital@gmail.com" target="_blank"> Michele Di Nocera </a> </div>
+                <div class="line"> {{ $t('allCreditsTo') }} <a href="https://www.scorpionmasque.com/" target="_blank"> Scorpion Masqué </a> </div>
+            </template>
             <template v-else-if="modalType==MODAL_TYPES.cardDetail">
                 <div class="img-container">
                     <img :src="getLawImageUrlLocale(selectedCard)" alt="">
@@ -72,6 +77,14 @@ const getLawImageUrlLocale=(lawId:number)=>{
             font-size: 30px
             color: $primary-color
             text-align: center
+        .line
+            margin: 20px 0
+            font-size: 18px
+            font-weight: 600
+            a
+                text-decoration: none
+                color:$primary-color
+                font-weight: 700
         .buttons
             display: flex
             width: 70%

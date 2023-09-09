@@ -19,6 +19,7 @@ export enum ORIENTATIONS{
 export enum MODAL_TYPES{
   newGame="new-game",
   cardDetail="card-detail",
+  credits="credits"
 };
 export const VERIFICATOR_STATES=[null,true,false];
 export const LAWS_VERIFICATORS={

@@ -7,5 +7,8 @@
   "yes": "Yes",
   "cancel": "Cancel",
   "newGame": "New game?",
+  "madeWithLove":"Made by ",
+  "credits":"Credits",
+  "allCreditsTo":"All credits to ",
   "tmc":"Turing Machine Companion"
 }

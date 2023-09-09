@@ -30,20 +30,9 @@
                 <img :src="getLawImageUrlLocale(law)" alt="">
             </div>
             <div class="conditions-container with-imgs">
-                <!-- <template v-if="LAWS_VERIFICATORS[law].length%3==0">
-                    <div class="row" v-for="counter in arrayFromZeroToNumber((LAWS_VERIFICATORS[law].length/3)+1)">
-                        <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!note.laws[lawIndex].possibilities[possibilityIndex+counter*3]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[law].filter((_,i)=>Math.floor(i/3)==counter)">
-                            <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex+counter*3)">
-                        </div>    
-                    </div>
-                </template> -->
-                <!-- <template v-else> -->
-                    <div class="row" v-for="counter in arrayFromZeroToNumber(Math.ceil((LAWS_VERIFICATORS[law].length/2))+1)">
-                        <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!note.laws[lawIndex].possibilities[possibilityIndex+counter*2]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[law].filter((_,i)=>Math.floor(i/2)==counter)">
-                            <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex+counter*2)">
-                        </div>
-                    </div>
-                <!-- </template> -->
+                <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!note.laws[lawIndex].possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[law]">
+                    <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)">
+                </div>
             </div>
         </div>
     </div>
@@ -203,24 +192,26 @@ $small-item-height:12px
                     pointer-events: none
         .conditions-container
             &.with-imgs
+                display: flex
+                flex-wrap: wrap
                 .row
                     display: flex
                 .condition-container
-                    border: none
+                    border: solid 2px transparent
                     cursor: pointer
                     overflow: hidden
+                    width: calc(33% - 8px)
+                    @media (max-width: $breakpoint-mobile)
+                        width: calc(50% - 8px)
                     &.definitive
-                        border: solid 2px $primary-color
+                        border-color:$primary-color
                     &.inactive
-                        border: none
                         text-decoration: line-through
                         opacity: 0.5
                     img
-                        width: calc(100% - 10px)
-                        transform: scale(1.2)
+                        width: 100%
                         &.condition
                             margin-left: 0
-                            max-height: 35.5px
             .condition-container
                 border-radius: 8px
                 border: solid 2px $primary-color
