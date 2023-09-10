@@ -5,6 +5,7 @@ export interface GameInfo {
     code:number,
     color:number,
     status:string,
+    hash:string,
 }
 
 export const useGetGameInfo= async () => {

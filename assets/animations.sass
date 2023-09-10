@@ -1,0 +1,20 @@
+@mixin loading-pulse
+    animation: 1.5s pulse linear infinite
+
+@keyframes pulse
+  0%,100%
+    opacity: 0.5
+  50%
+    opacity: 1
+
+@keyframes notification-enter
+  0%
+    margin-left: 0
+  100%
+    margin-left: 100%
+
+@keyframes notification-leave
+  0%
+    margin-left: 100%
+  100%
+    margin-left: 0

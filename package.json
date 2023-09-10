@@ -4,6 +4,7 @@
   "scripts": {
     "build": "nuxt build",
     "dev": "nuxt dev",
+    "host": "nuxt dev --host",
     "generate": "nuxt generate",
     "preview": "nuxt preview",
     "postinstall": "nuxt prepare"
@@ -11,13 +12,15 @@
   "devDependencies": {
     "@kevinmarrec/nuxt-pwa": "^0.17.0",
     "@nuxt/devtools": "latest",
+    "@nuxtjs/i18n": "^8.0.0-rc.4",
     "@types/node": "^17.0.29",
     "nuxt": "^3.7.0"
   },
   "dependencies": {
     "@davestewart/nuxt-scrollbar": "^1.0.0",
     "@intlify/unplugin-vue-i18n": "^1.0.1",
-    "@nuxtjs/i18n-edge": "^8.0.0-beta.2-27781059.fadc56d",
+    "@kyvg/vue3-notification": "^3.0.1",
+    "nuxt-lazy-load": "^3.0.4",
     "sass": "^1.66.1",
     "vue-i18n": "^9.3.0"
   }

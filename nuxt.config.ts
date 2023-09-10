@@ -10,14 +10,6 @@ export default defineNuxtConfig({
   components: [
     { path: '~/components/', pathPrefix: false },
   ],
-  imports: {
-    presets: [
-      {
-        from: 'vue-i18n',
-        imports: ['useI18n']
-      }
-    ]
-  },
   vite: {
     plugins: [
       VueI18nVitePlugin({
@@ -44,8 +36,16 @@ export default defineNuxtConfig({
   },
   modules: [
     '@kevinmarrec/nuxt-pwa',
-    '@davestewart/nuxt-scrollbar'
+    '@davestewart/nuxt-scrollbar',
+    '@nuxtjs/i18n',
+    'nuxt-lazy-load'
   ],
+  lazyLoad:{
+    defaultImage: '/icon.png',
+    loadingClass: 'loading',
+    loadedClass: 'loaded',
+    appendClass: false,
+  },
   pwa: {
     manifest: {
       name: 'Turing Machine Companion',

@@ -27,11 +27,11 @@
                 </div>
             </div>
             <div class="law-container" @click="()=>{selectedCard=law;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
-                <img :src="getLawImageUrlLocale(law)" alt="">
+                <img :src="getLawImageUrlLocale(law)" :alt="'law_card_'+law" />
             </div>
             <div class="conditions-container with-imgs">
                 <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!note.laws[lawIndex].possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[law]">
-                    <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)">
+                    <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
                 </div>
             </div>
         </div>
@@ -39,8 +39,6 @@
 </template>
 
 <script setup lang="ts">
-import { LawType } from '#imports';
-
 const showModal=useShowModal();
 const modalType=useModalType();
 const selectedCard=useSelectedCard();
@@ -49,17 +47,6 @@ const gameInfoOk=useGameInfoOk();
 const gameInfo=useGameInfo();
 const inputValues=ref(Object.values(LawType).map(()=>""));
 const { locale }= useI18n();
-
-watch(gameInfoOk,()=>{
-    note.value.laws=structuredClone(EMPTY_LAWS)
-    if(gameInfoOk.value)
-        gameInfo.value?.ind.forEach((law,lawIndex)=>{
-            note.value.laws.push({key:Object.keys(LawType)[lawIndex] as LawType,possibilities:[]})
-            LAWS_VERIFICATORS[law].forEach((verificator:number)=>{
-                note.value.laws[lawIndex].possibilities.push({value:""+verificator,active:true});
-            })
-        })
-})
 
 const addCondition=(lawIndex:number)=>{
     note.value.laws[lawIndex].possibilities.push({value:inputValues.value[lawIndex],active:true});
@@ -119,6 +106,7 @@ $small-item-height:12px
             margin: auto
             aspect-ratio: 3
             border-radius: 14px
+            cursor: pointer
             img
                 width: calc(100% + 26px)
                 object-fit: cover
@@ -205,6 +193,8 @@ $small-item-height:12px
                         width: calc(50% - 8px)
                     &.definitive
                         border-color:$primary-color
+                        &.inactive
+                            border-color: transparent
                     &.inactive
                         text-decoration: line-through
                         opacity: 0.5

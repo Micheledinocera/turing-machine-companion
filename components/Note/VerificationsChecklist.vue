@@ -44,9 +44,9 @@ const updateVerificator=(rowIndex:number,verificatorIndex:number,value: boolean|
 .verifications-checklist
     width: calc($right-width - 80px)
     padding: 0 40px
-    @media (max-width: $breakpoint-tablet)
-        width: calc(100% - 20px)
-        padding: 0 10px
+    @media (max-width: $breakpoint-mobile)
+        width: calc($right-width - 10px)
+        padding: 0 10px 0 0
     .row
         display: flex
         font-weight: 700

@@ -1,25 +1,36 @@
 <template>
     <div class="note-container">
         <div class="add-container">
-            <div class="game-info">
+            <div class="game-info" v-if="!gameInfoOk && !pendingGameInfo">
                 <input type="text" :placeholder="t('gameCode')" v-model="gameCode" @keydown.enter="getInfo">
                 <div class="loader-container" v-if="pendingGameInfo"> <Loader/> </div>
                 <div :class="['get-info',{inactive:gameCode==''},{error:!gameInfoOk}]" @click="getInfo" v-else> {{buttonLabel}} </div>
             </div>
-            <div :class="['add',{inactive:inactive}]" @click="addEmptyNote"> {{t('newNoteRow')}} </div>
+            <div class="game-info" v-else-if="gameInfoOk">
+                <div class="game-code" @click="copyCode"> {{ t('gameCode') }}: {{ gameInfo?.hash.replace(/\s/g, '') }} </div>
+            </div>
+            <div :class="['add',{inactive:inactive}]" @click="addEmptyNote" v-if="gameInfoOk"> {{t('newNoteRow')}} </div>
         </div>
-        <div class="row">
-            <CombinationsTable />
-            <VerificationsChecklist />
-        </div>
-        <div class="row">
-            <PossibleCodesPicklist />
-            <LawsContainer />
-        </div>
+        <template v-if="gameInfoOk">
+            <div class="row">
+                <CombinationsTable />
+                <VerificationsChecklist />
+            </div>
+            <div class="row">
+                <PossibleCodesPicklist />
+                <LawsContainer />
+            </div>
+        </template>
+        <template v-else>
+            <div :class="['splash-screen',{'loading':pendingGameInfo}]"></div>
+        </template>
     </div>
 </template>
 
 <script setup lang="ts">
+import { LawType } from '#imports';
+import { useNotification } from "@kyvg/vue3-notification";
+
 const gameCode=ref("");
 const pendingGameInfo=ref(false);
 const gameInfo=useGameInfo();
@@ -28,6 +39,7 @@ const note=useNote();
 const gameInfoOk=useGameInfoOk();
 const selectedRowNote=useSelectedRowNote();
 const { t } = useI18n();
+const { notify }  = useNotification();
 
 const inactive=computed(()=>
     note.value.noteRows.some(row=>row.verificators.filter(verificator=>verificator!==null).length<3)
@@ -38,13 +50,27 @@ const addEmptyNote=()=>{
     selectedRowNote.value=note.value.noteRows.length-1;
 }
 
+const copyCode=()=>{
+    navigator.clipboard.writeText(gameInfo.value?gameInfo.value?.hash:'');
+    notify({title:t('copied'),type: "success"})
+}
+
 const getInfo=async ()=>{
     gameInfoOk.value=null;
     pendingGameInfo.value=true;
     gameInfo.value=(await getGameInfo(gameCode.value)).value;
-    pendingGameInfo.value=false;
     if(gameInfo.value?.status=='bad') gameInfoOk.value=false
-    else gameInfoOk.value=true
+    else {
+        gameInfoOk.value=true;
+        note.value.laws=structuredClone([]);
+        gameInfo.value?.ind.forEach((law,lawIndex)=>{
+            note.value.laws.push({key:Object.keys(LawType)[lawIndex] as LawType,possibilities:[]})
+            LAWS_VERIFICATORS[law].forEach((verificator:number)=>{
+                note.value.laws[lawIndex].possibilities.push({value:""+verificator,active:true});
+            })
+        })
+    }
+    pendingGameInfo.value=false;
     gameCode.value='';
 }
 
@@ -65,6 +91,7 @@ const buttonLabel=computed(()=>{
         margin: 10px
         .game-info
             display: flex
+            margin: auto
             input
                 width: 80px
             .loader-container
@@ -87,8 +114,16 @@ const buttonLabel=computed(()=>{
                     pointer-events: none
                     &.error
                         background-color: $red
+            .game-code
+                width: fit-content
+                color: white
+                font-weight: 700
+                cursor: pointer
+                background-color: $primary-color-dark
+                padding: 6px 8px
+                border-radius: 8px
         .add
-            margin-left: auto
+            margin: auto
             width: fit-content
             color: white
             font-weight: 700
@@ -104,7 +139,13 @@ const buttonLabel=computed(()=>{
     .row
         display: flex
         @media (max-width: $breakpoint-tablet)
-            display: block
-        &:last-child
-            margin-bottom: 80px
+            &:last-child
+                display: block
+                margin-bottom: 80px
+    .splash-screen
+        height: calc(100vh - 160px)
+        @include background-standard
+        background-image: url('~/assets/imgs/box.png')
+        &.loading
+            @include loading-pulse
 </style>

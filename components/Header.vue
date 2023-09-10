@@ -4,7 +4,8 @@
             <option v-for="language in LANGUAGES" :value="language.iso"> {{ language.label }} </option>
         </select> 
         <div class="info" @click="()=>{showModal=true;modalType=MODAL_TYPES.credits}"/>
-        <div class="logo" @click="()=>{showModal=true;modalType=MODAL_TYPES.newGame}">
+        <div class="refresh" @click="()=>{showModal=true;modalType=MODAL_TYPES.newGame}"/>
+        <div class="logo">
             <div class="companion"> COMPANION </div>
         </div>
     </div>
@@ -41,7 +42,7 @@ const modalType=useModalType();
             transform: rotate(-30deg)
             margin-top: 30px
             margin-left: 60px
-    .info
+    .info,.refresh
         @include background-standard
         background-image: url('~/assets/imgs/info.svg')
         width: 20px
@@ -49,4 +50,7 @@ const modalType=useModalType();
         position: absolute
         margin-left: 20px
         cursor: pointer
+    .refresh
+        margin-left: 60px
+        background-image: url('~/assets/imgs/refresh.svg')
 </style>
