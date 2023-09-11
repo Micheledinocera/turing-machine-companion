@@ -12,9 +12,10 @@ export const LANGUAGES=[
   {value:"kr",label:"한국어",iso:"ko"},
   {value:"cns",label:"简体中文",iso:"zh"}
 ];
-export enum ORIENTATIONS{
-  vertical="portrait-primary",
-  horizontal="landscape-primary",
+export enum DEVICES{
+  desktop="desktop",
+  tablet="tablet",
+  mobile="mobile",
 };
 export enum MODAL_TYPES{
   newGame="new-game",
@@ -81,6 +82,13 @@ export const arrayFromOneToNumber=(n:number)=>{
 export const arrayFromZeroToNumber=(n:number)=>{
   return Array.from({length: n}, (_, i) => i) as number[]
 }
+export const getDeviceFromWidth=()=>{
+  if(window.innerWidth>768)
+    return DEVICES.desktop
+  else
+    return window.innerWidth>425?DEVICES.tablet:DEVICES.mobile
+}
 
-// con due codici diversi consecutivi si rompe
-// new game non funziona
+// bug perfect scrollbar - ok?
+// header fixed on scroll - ok?
+// modalità diverse

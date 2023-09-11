@@ -41,7 +41,7 @@ export default defineNuxtConfig({
     'nuxt-lazy-load'
   ],
   lazyLoad:{
-    defaultImage: '/icon.png',
+    defaultImage: development?'/icon.png':'/turing-machine-companion/icon.png',
     loadingClass: 'loading',
     loadedClass: 'loaded',
     appendClass: false,

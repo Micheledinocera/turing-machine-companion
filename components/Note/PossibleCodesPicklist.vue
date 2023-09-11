@@ -1,5 +1,5 @@
 <template>
-    <div :class="['possible-codes-picklist',{collapsed:orientation==ORIENTATIONS.vertical && isCollapsed}]">
+    <div :class="['possible-codes-picklist',{collapsed:isNotDesktop && isCollapsed}]">
         <div class="collapse" @click="isCollapsed=!isCollapsed"> <div class="icon"> </div> </div>
         <div class="row header">
             <div class="item" v-for="shape in SHAPES"> </div>
@@ -15,7 +15,7 @@
 <script setup lang="ts">
 const note=useNote();
 const isCollapsed=ref(true);
-const orientation=useOrientation();
+const { isNotDesktop }=useDevice();
 
 const isInactive=(value:number,position:number)=>{
     return note.value.possibleCodes[position].includes(value)
@@ -115,6 +115,7 @@ const setCode=(value:number,position:number)=>{
                 background-color: white
     @media (max-width: $breakpoint-tablet)
         width: calc(100% - 20px)
+        margin-bottom: 20px
         .collapse
             display: block
 </style>

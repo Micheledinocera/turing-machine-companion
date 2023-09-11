@@ -4,25 +4,44 @@
             <div class="select-row"> </div>
             <div class="item" v-for="i in arrayFromZeroToNumber(3)" :key="'header_'+i"> </div>
         </div>
-        <div :class="['row',{'inactive':rowIndex!=selectedRowNote}]" v-for="(noteRow,rowIndex) in noteRows">
-            <div class="select-row" @click="()=>selectedRowNote=rowIndex"></div>
-            <template v-for="menuIndex in arrayFromZeroToNumber(3)" :key="'item_'+noteRow.code[menuIndex]+'_'+menuIndex">
-                <div :class="['item',SHAPES[menuIndex]]" @click="()=>showMenu(menuIndex)"> 
-                    <div class="value"> {{ noteRow.code[menuIndex] }} </div>
-                    <div class="choice-menu" v-if="showMenuArray[menuIndex]">
-                        <div class="menu-item" v-for="value in arrayFromOneToNumber(5)" @click.stop="()=>updateCode(menuIndex,rowIndex,value)"> {{ value }} </div>
+        <template v-if="fixed">
+            <div :class="['row']">
+                <div class="select-row"></div>
+                <template v-for="menuIndex in arrayFromZeroToNumber(3)" :key="'item_'+noteRows[selectedRowNote].code[menuIndex]+'_'+menuIndex">
+                    <div :class="['item',SHAPES[menuIndex]]" @click="()=>showMenu(menuIndex)"> 
+                        <div class="value"> {{ noteRows[selectedRowNote].code[menuIndex] }} </div>
+                        <div class="choice-menu" v-if="showMenuArray[menuIndex]">
+                            <div class="menu-item" v-for="value in arrayFromOneToNumber(5)" @click.stop="()=>updateCode(menuIndex,selectedRowNote,value)"> {{ value }} </div>
+                        </div>
                     </div>
-                </div>
-            </template>
-        </div>
+                </template>
+            </div>
+        </template>
+        <template v-else>
+            <div :class="['row',{'inactive':rowIndex!=selectedRowNote}]" v-for="(noteRow,rowIndex) in noteRows" :ref="el => { if(rowIndex==noteRows.length-1) selectedRowRef = el }" :key="'item_rownote_'+rowIndex">
+                <div class="select-row" @click="()=>selectedRowNote=rowIndex"></div>
+                <template v-for="menuIndex in arrayFromZeroToNumber(3)" :key="'item_'+noteRow.code[menuIndex]+'_'+menuIndex">
+                    <div :class="['item',SHAPES[menuIndex]]" @click="()=>showMenu(menuIndex)"> 
+                        <div class="value"> {{ noteRow.code[menuIndex] }} </div>
+                        <div class="choice-menu" v-if="showMenuArray[menuIndex]">
+                            <div class="menu-item" v-for="value in arrayFromOneToNumber(5)" @click.stop="()=>updateCode(menuIndex,rowIndex,value)"> {{ value }} </div>
+                        </div>
+                    </div>
+                </template>
+            </div>
+        </template>
     </div>
 </template>
 
 <script setup lang="ts">
+defineProps<{
+  fixed?: boolean
+}>()
 import { NoteRow } from '~/composables/note';
 
 const note=useNote()
-const selectedRowNote=useSelectedRowNote()
+const selectedRowNote=useSelectedRowNote();
+const selectedRowRef=useSelectedRowRef();
 const noteRows=computed(()=>note.value.noteRows as NoteRow[])
 const showMenuArray=ref([false,false,false])
 
@@ -43,8 +62,6 @@ const updateCode=(menuIndex:number,rowIndex:number,value:number)=>{
 .combinations-table
     width: $left-width
     margin-left: 10px
-    // @media (max-width: $breakpoint-tablet)
-    //     width: calc(100% - 20px)
     .row
         display: flex
         height: $height-row

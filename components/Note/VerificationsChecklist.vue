@@ -4,16 +4,28 @@
             <div class="row header">
                 <div class="item" v-for="letter in Object.values(LawType)"> <div class="label"> {{ letter }} </div> </div>
             </div>
-            <div :class="['row',{'inactive':rowIndex!=selectedRowNote}]" v-for="(noteRow,rowIndex) in noteRows">
-                <div class="item" v-for="(letter,verificatorIndex) in Object.values(LawType)" :key="'verificator_'+letter+'_'+rowIndex">
-                    <div :class="['checkbox',checkboxClass(noteRow.verificators[verificatorIndex]),{inactive:inactive(noteRow.verificators[verificatorIndex],rowIndex)}]" @click="()=>updateVerificator(rowIndex,verificatorIndex,noteRow.verificators[verificatorIndex])"> </div>
+            <template v-if="fixed">
+                <div :class="['row']">
+                    <div class="item" v-for="(letter,verificatorIndex) in Object.values(LawType)" :key="'verificator_'+letter+'_'+selectedRowNote">
+                        <div :class="['checkbox',checkboxClass(noteRows[selectedRowNote].verificators[verificatorIndex]),{inactive:inactive(noteRows[selectedRowNote].verificators[verificatorIndex],selectedRowNote)}]" @click="()=>updateVerificator(selectedRowNote,verificatorIndex,noteRows[selectedRowNote].verificators[verificatorIndex])"> </div>
+                    </div>
                 </div>
-        </div>
+            </template>
+            <template v-else>
+                <div :class="['row',{'inactive':rowIndex!=selectedRowNote}]" v-for="(noteRow,rowIndex) in noteRows">
+                    <div class="item" v-for="(letter,verificatorIndex) in Object.values(LawType)" :key="'verificator_'+letter+'_'+rowIndex">
+                        <div :class="['checkbox',checkboxClass(noteRow.verificators[verificatorIndex]),{inactive:inactive(noteRow.verificators[verificatorIndex],rowIndex)}]" @click="()=>updateVerificator(rowIndex,verificatorIndex,noteRow.verificators[verificatorIndex])"> </div>
+                    </div>
+                </div>
+            </template>
         </div>
     </div>
 </template>
 
 <script setup lang="ts">
+defineProps<{
+  fixed?: boolean
+}>()
 import { NoteRow } from '~/composables/note';
 
 const note=useNote();

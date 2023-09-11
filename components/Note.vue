@@ -12,14 +12,36 @@
             <div :class="['add',{inactive:inactive}]" @click="addEmptyNote" v-if="gameInfoOk"> {{t('newNoteRow')}} </div>
         </div>
         <template v-if="gameInfoOk">
-            <div class="row">
-                <CombinationsTable />
-                <VerificationsChecklist />
-            </div>
-            <div class="row">
-                <PossibleCodesPicklist />
-                <LawsContainer />
-            </div>
+            <template v-if="isNotDesktop">
+                <div class="row fixed" v-if="isFixedRow">
+                    <CombinationsTable :fixed="true"/>
+                    <VerificationsChecklist :fixed="true"/>
+                </div>
+                <div class="row">
+                    <PossibleCodesPicklist />
+                </div>
+                <!-- <div :class="['row',{fixed:isFixedRow}]">
+                    <CombinationsTable :fixed="isFixedRow"/>
+                    <VerificationsChecklist :fixed="isFixedRow"/>
+                </div> -->
+                <div class="row">
+                    <CombinationsTable/>
+                    <VerificationsChecklist/>
+                </div>
+                <div class="row">
+                    <LawsContainer />
+                </div>
+            </template>
+            <template v-else>
+                <div class="row">
+                    <CombinationsTable />
+                    <VerificationsChecklist />
+                </div>
+                <div class="row">
+                    <PossibleCodesPicklist />
+                    <LawsContainer />
+                </div>
+            </template>
         </template>
         <template v-else>
             <div :class="['splash-screen',{'loading':pendingGameInfo}]"></div>
@@ -40,6 +62,8 @@ const gameInfoOk=useGameInfoOk();
 const selectedRowNote=useSelectedRowNote();
 const { t } = useI18n();
 const { notify }  = useNotification();
+const { isNotDesktop }=useDevice();
+const isFixedRow=useIsFixedRow();
 
 const inactive=computed(()=>
     note.value.noteRows.some(row=>row.verificators.filter(verificator=>verificator!==null).length<3)
@@ -138,10 +162,17 @@ const buttonLabel=computed(()=>{
                 pointer-events: none
     .row
         display: flex
-        @media (max-width: $breakpoint-tablet)
-            &:last-child
+        &:last-child
+            margin-bottom: 80px
+            @media (max-width: $breakpoint-tablet)
                 display: block
-                margin-bottom: 80px
+        &.fixed
+            position: fixed
+            width: 100%
+            height: $base-height*2
+            z-index: 1
+            top:0
+            background-color: $primary-color-light 
     .splash-screen
         height: calc(100vh - 160px)
         @include background-standard

@@ -3,7 +3,7 @@
     <Modal v-if="showModal"/>
     <notifications classes="vue-notification custom-notification" width="auto" max="1" :duration="1000" speed="500" animation-type="css" animation-name="notification"/>
     <NuxtLayout>
-      <NuxtScrollbar id="layout-content">  
+      <NuxtScrollbar id="layout-content" @scroll="onScrollListener">  
         <NuxtPage/>
       </NuxtScrollbar >
     </NuxtLayout>
@@ -11,14 +11,16 @@
 </template>
 
 <script setup lang="ts">
-import { ORIENTATIONS } from './utils/Utils';
-
 const showModal=useShowModal();
-const orientation=useOrientation();
 const { locale }= useI18n();
+const selectedRowRef=useSelectedRowRef();
+const isFixedRow=useIsFixedRow();
+
+const onScrollListener=(evt: any)=>{
+  isFixedRow.value=evt.target.scrollTop-(selectedRowRef.value?selectedRowRef.value.offsetTop:0)>-4
+}
 
 onMounted(()=> {
-
   if (LANGUAGES.map((item) => item.iso).includes(navigator.language))
     locale.value = navigator.language;
   else {
@@ -27,14 +29,9 @@ onMounted(()=> {
     locale.value = filteredLang ? filteredLang.iso : "en";
   }
 
-  orientation.value=window.innerWidth>768?ORIENTATIONS.horizontal:ORIENTATIONS.vertical;
-
   window.addEventListener("beforeunload", (event) => {
     event.preventDefault();
     event.returnValue = "";
-  });
-  window.addEventListener("resize", () => {
-    orientation.value=window.innerWidth>768?ORIENTATIONS.horizontal:ORIENTATIONS.vertical;
   });
   window.addEventListener('popstate', (e) => {
       e.preventDefault();
@@ -68,4 +65,7 @@ body
 img
   &.loading
     @include loading-pulse
+@media (max-width: $breakpoint-tablet)
+  .ps__rail-y
+    display: none !important
 </style>
