@@ -20,10 +20,6 @@
                 <div class="row">
                     <PossibleCodesPicklist />
                 </div>
-                <!-- <div :class="['row',{fixed:isFixedRow}]">
-                    <CombinationsTable :fixed="isFixedRow"/>
-                    <VerificationsChecklist :fixed="isFixedRow"/>
-                </div> -->
                 <div class="row">
                     <CombinationsTable/>
                     <VerificationsChecklist/>

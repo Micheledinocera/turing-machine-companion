@@ -1,11 +1,20 @@
+
+export enum gameModes{
+    classic="0",
+    extreme="1",
+    nightmare="2"
+};
+
 export interface GameInfo {
     ind:number[],
+    fake:number[],
     law:number[],
     crypt:number[],
     code:number,
     color:number,
     status:string,
     hash:string,
+    m:gameModes
 }
 
 export const useGetGameInfo= async () => {

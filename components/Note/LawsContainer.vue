@@ -1,40 +1,92 @@
 <template>
-    <div class="laws-container">
-        <div class="law-item" v-for="(law,lawIndex) in note.laws" v-if="!gameInfoOk">
-            <div class="key"> {{ law.key }} </div>
-            <div class="text-container">
-                <input type="text" v-model="inputValues[lawIndex]">
-                <div :class="['add',{inactive:inactiveAdd(lawIndex)}]" @click="()=>addCondition(lawIndex)"> + </div>
-            </div>
-            <div class="conditions-container">
-                <div class="condition-container" v-for="(possibility,possibilityIndex) in law.possibilities">
-                    <div class="remove" @click="()=>removeCondition(lawIndex,possibilityIndex)"> - </div>
-                    <div :class="['condition',{inactive:!possibility.active}]" @click="()=>toggleActive(lawIndex,possibilityIndex)"> {{possibility.value}} </div>
+    <div :class="['laws-container','mode_'+gameInfo?.m]">
+        <template v-if="!gameInfoOk">
+            <div class="law-item" v-for="(law,lawIndex) in note.laws">
+                <div class="key"> {{ law.key }} </div>
+                <div class="text-container">
+                    <input type="text" v-model="inputValues[lawIndex]">
+                    <div :class="['add',{inactive:inactiveAdd(lawIndex)}]" @click="()=>addCondition(lawIndex)"> + </div>
+                </div>
+                <div class="conditions-container">
+                    <div class="condition-container" v-for="(possibility,possibilityIndex) in law.possibilities">
+                        <div class="remove" @click="()=>removeCondition(lawIndex,possibilityIndex)"> - </div>
+                        <div :class="['condition',{inactive:!possibility.active}]" @click="()=>toggleActive(lawIndex,possibilityIndex)"> {{possibility.value}} </div>
+                    </div>
+                </div>
+                <div class="possibility-container" v-if="activePossibilities(lawIndex).length==1"> 
+                    <div class="check"> </div>
+                    <div class="value"> {{ activePossibilities(lawIndex)[0].value }} </div>
                 </div>
             </div>
-            <div class="possibility-container" v-if="activePossibilities(lawIndex).length==1"> 
-                <div class="check"> </div>
-                <div class="value"> {{ activePossibilities(lawIndex)[0].value }} </div>
-            </div>
-        </div>
-        <div class="law-item" v-for="(law,lawIndex) in gameInfo?.ind" v-else>
-            <div class="label-container">
-                <div class="key"> {{ Object.keys(LawType)[lawIndex] }} </div>
-                <div class="law-id"> {{ law }} </div>
-                <div :class="['rule-id','color_'+gameInfo?.color]">
-                    {{ gameInfo?.crypt[lawIndex] }} 
-                    <div class="icon"></div> 
+        </template>
+        <template v-else>
+            <template v-if="gameInfo?.m==gameModes.classic">
+                <div class="law-item" v-for="(law,lawIndex) in note.laws">
+                    <div class="label-container">
+                        <div class="key"> {{ law.key }} </div>
+                        <div class="law-id"> {{ gameInfo?.ind[lawIndex] }} </div>
+                        <div :class="['rule-id','color_'+gameInfo?.color]">
+                            {{ gameInfo?.crypt[lawIndex] }} 
+                            <div class="icon"></div> 
+                        </div>
+                    </div>
+                    <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[lawIndex]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
+                        <img :src="getLawImageUrlLocale(gameInfo.ind[lawIndex])" :alt="'law_card_'+law" />
+                    </div>
+                    <div class="conditions-container with-imgs">
+                        <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[gameInfo.ind[lawIndex]]">
+                            <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
+                        </div>
+                    </div>
                 </div>
-            </div>
-            <div class="law-container" @click="()=>{selectedCard=law;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
-                <img :src="getLawImageUrlLocale(law)" :alt="'law_card_'+law" />
-            </div>
-            <div class="conditions-container with-imgs">
-                <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!note.laws[lawIndex].possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[law]">
-                    <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
+            </template>
+            <template v-else-if="gameInfo?.m==gameModes.extreme">
+                <div class="law-item" v-for="(law,lawIndex) in note.laws">
+                    <div class="label-container">
+                        <div class="key"> {{ law.key }} </div>
+                        <div class="law-id"> {{ gameInfo?.ind[lawIndex] }} </div>
+                        <div :class="['rule-id','color_'+gameInfo?.color]">
+                            {{ gameInfo?.crypt[lawIndex] }} 
+                            <div class="icon"></div> 
+                        </div>
+                    </div>
+                    <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[lawIndex]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
+                        <img :src="getLawImageUrlLocale(gameInfo.ind[lawIndex])" :alt="'law_card_'+law" />
+                    </div>
+                    <div class="conditions-container with-imgs">
+                        <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[gameInfo.ind[lawIndex]]">
+                            <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
+                        </div>
+                    </div>
                 </div>
-            </div>
-        </div>
+            </template>
+            <template v-else-if="gameInfo?.m==gameModes.nightmare">
+                <div class="labels-container">
+                    <div class="label-container" v-for="(law,lawIndex) in arrayFromZeroToNumber(gameInfo?.ind.length)">
+                        <div class="key"> {{ Object.keys(LawType)[lawIndex] }} </div>
+                        <div :class="['rule-id','color_'+gameInfo?.color]">
+                            {{ gameInfo?.crypt[lawIndex] }} 
+                            <div class="icon"></div> 
+                        </div>
+                    </div>
+                </div>
+                <div class="law-items">
+                    <div class="law-item" v-for="(law,lawIndex) in note.laws">
+                        <div class="label-container">
+                            <div class="law-id"> {{ gameInfo?.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)] }} </div>
+                        </div>
+                        <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[lawIndex]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
+                            <img :src="getLawImageUrlLocale(gameInfo.ind[lawIndex])" :alt="'law_card_'+law" />
+                        </div>
+                        <div class="conditions-container with-imgs">
+                            <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[gameInfo?.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)]]">
+                                <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </template>
+        </template>
     </div>
 </template>
 
@@ -81,6 +133,16 @@ const getLawImageUrlLocale=(lawId:number)=>{
     const localeValue=lang?lang.value:"en";
     return LAW_IMG_URL.replaceAll('{locale}',localeValue.toUpperCase()).replace('{lawId}',lawIdString)
 }
+
+// const shuffleInd=computed(()=>{
+//     if(gameInfo.value?.m==gameModes.nightmare)
+//         return inds.sort(() => 0.5 - Math.random())
+// })
+
+onMounted(()=>{
+    if(gameInfo.value?.m==gameModes.nightmare)
+        note.value.laws.sort(() => 0.5 - Math.random())
+})
 </script>
 
 <style scoped lang="sass">
@@ -111,122 +173,122 @@ $small-item-height:12px
                 width: calc(100% + 26px)
                 object-fit: cover
                 object-position: -12px -14px
-        .label-container
-            display: flex
-            padding: 10px
-            >div
-                margin: auto
-                font-weight: 700
-                padding: 4px 8px
-                border-radius: 6px
-            .key
-                text-align: center
-                font-weight: 700
+    .label-container
+        display: flex
+        padding: 10px
+        >div
+            margin: auto
+            font-weight: 700
+            padding: 4px 8px
+            border-radius: 6px
+        .key
+            text-align: center
+            font-weight: 700
+            color: $primary-color
+            font-size: 20px
+        .law-id
+            background-color: $primary-color
+            color: white
+        .rule-id
+            border: solid 2px black
+            color: black
+            .icon
+                @include background-standard
+                background-color: $primary-color-light
+                width: 16px
+                height: 16px
+                margin-top: -34px
+                margin-left: 24px
+                position: absolute 
+            &.color_0 
+                border-color: $primary-color
                 color: $primary-color
-                font-size: 20px
-            .law-id
-                background-color: $primary-color
-                color: white
-            .rule-id
-                border: solid 2px black
-                color: black
                 .icon
-                    @include background-standard
-                    background-color: $primary-color-light
-                    width: 16px
-                    height: 16px
-                    margin-top: -34px
-                    margin-left: 24px
-                    position: absolute 
-                &.color_0 
-                    border-color: $primary-color
-                    color: $primary-color
-                    .icon
-                        background-image: url('~/assets/imgs/icon-green.png')
-                &.color_1 
-                    border-color: $yellow
-                    color: $yellow
-                    .icon
-                        background-image: url('~/assets/imgs/icon-yellow.png')
-                &.color_2 
-                    border-color: $blue
-                    color: $blue
-                    .icon
-                        background-image: url('~/assets/imgs/icon-blue.png')
-                &.color_3 
-                    border-color: $purple
-                    color: $purple
-                    .icon
-                        background-image: url('~/assets/imgs/icon-purple.png')
-        .text-container
+                    background-image: url('~/assets/imgs/icon-green.png')
+            &.color_1 
+                border-color: $yellow
+                color: $yellow
+                .icon
+                    background-image: url('~/assets/imgs/icon-yellow.png')
+            &.color_2 
+                border-color: $blue
+                color: $blue
+                .icon
+                    background-image: url('~/assets/imgs/icon-blue.png')
+            &.color_3 
+                border-color: $purple
+                color: $purple
+                .icon
+                    background-image: url('~/assets/imgs/icon-purple.png')
+    .text-container
+        display: flex
+        height: $item-height
+        line-height: $item-height
+        margin-top: 10px
+        input
+            width: calc(100% - 30px)
+        .add
+            margin-left: 10px
+            border-radius: 20px
+            color: white
+            font-weight: 600
+            font-size: 24px
+            background-color: $primary-color-dark
+            width: 20px
+            cursor: pointer
+            text-align: center
+            &.inactive
+                opacity: 0.5
+                pointer-events: none
+    .conditions-container
+        &.with-imgs
             display: flex
-            height: $item-height
-            line-height: $item-height
+            flex-wrap: wrap
+            .row
+                display: flex
+            .condition-container
+                border: solid 2px transparent
+                cursor: pointer
+                overflow: hidden
+                width: calc(33% - 8px)
+                @media (max-width: $breakpoint-mobile)
+                    width: calc(50% - 8px)
+                &.definitive
+                    border-color:$primary-color
+                    &.inactive
+                        border-color: transparent
+                &.inactive
+                    text-decoration: line-through
+                    opacity: 0.5
+                img
+                    width: 100%
+                    &.condition
+                        margin-left: 0
+        .condition-container
+            border-radius: 8px
+            border: solid 2px $primary-color
+            display: flex
+            line-height: $small-item-height
             margin-top: 10px
-            input
-                width: calc(100% - 30px)
-            .add
-                margin-left: 10px
+            padding: 6px 2px
+            .remove
+                height: $small-item-height
                 border-radius: 20px
                 color: white
                 font-weight: 600
-                font-size: 24px
-                background-color: $primary-color-dark
-                width: 20px
+                font-size: $small-item-height
+                background-color: $red
+                width: $small-item-height
                 cursor: pointer
                 text-align: center
+            .condition
+                width: calc(100% - 30px)
+                margin-left: 10px
+                cursor: pointer
+                font-size: $small-item-height
                 &.inactive
+                    text-decoration: line-through
                     opacity: 0.5
-                    pointer-events: none
-        .conditions-container
-            &.with-imgs
-                display: flex
-                flex-wrap: wrap
-                .row
-                    display: flex
-                .condition-container
-                    border: solid 2px transparent
-                    cursor: pointer
-                    overflow: hidden
-                    width: calc(33% - 8px)
-                    @media (max-width: $breakpoint-mobile)
-                        width: calc(50% - 8px)
-                    &.definitive
-                        border-color:$primary-color
-                        &.inactive
-                            border-color: transparent
-                    &.inactive
-                        text-decoration: line-through
-                        opacity: 0.5
-                    img
-                        width: 100%
-                        &.condition
-                            margin-left: 0
-            .condition-container
-                border-radius: 8px
-                border: solid 2px $primary-color
-                display: flex
-                line-height: $small-item-height
-                margin-top: 10px
-                padding: 6px 2px
-                .remove
-                    height: $small-item-height
-                    border-radius: 20px
-                    color: white
-                    font-weight: 600
-                    font-size: $small-item-height
-                    background-color: $red
-                    width: $small-item-height
-                    cursor: pointer
-                    text-align: center
-                .condition
-                    width: calc(100% - 30px)
-                    margin-left: 10px
-                    cursor: pointer
-                    font-size: $small-item-height
-                    &.inactive
-                        text-decoration: line-through
-                        opacity: 0.5
         .possibility-container
             margin-top: 10px 
             padding: 6px
@@ -241,4 +303,12 @@ $small-item-height:12px
                 height: $item-height
                 @include background-standard
                 background-image: url('~/assets/imgs/ok.png')
+    &.mode_2
+        display: block
+        .law-items
+            display: flex
+            flex-wrap: wrap
+        .labels-container
+            display: flex
+            flex-wrap: wrap
 </style>
