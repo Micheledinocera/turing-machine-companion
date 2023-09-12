@@ -88,7 +88,3 @@ export const getDeviceFromWidth=()=>{
   else
     return window.innerWidth>425?DEVICES.tablet:DEVICES.mobile
 }
-
-// bug perfect scrollbar - ok?
-// header fixed on scroll - ok?
-// modalità diverse

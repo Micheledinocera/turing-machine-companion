@@ -56,7 +56,7 @@ const getLawImageUrlLocale=(lawId:number)=>{
     left: 0
     position: fixed
     background-color: rgba(0,0,0,0.5)
-    z-index: 1
+    z-index: 2
     .modal-content
         width: 70%
         height: auto

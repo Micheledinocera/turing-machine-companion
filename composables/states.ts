@@ -6,6 +6,7 @@ export const useSelectedCard = () => useState<number>('selectedCard', () => 1)
 export const useGameInfoOk = () => useState<boolean|null>('gameInfoOk', () => null)
 export const useSelectedRowRef = () => useState<any>('selectedRowRef')
 export const useIsFixedRow = () => useState<boolean>('isFixedRow')
+export const useRandoms = () => useState<(0|1)[]>('randoms',()=>[])
 
 export const useDevice = ()=>{
     const device=ref(DEVICES.desktop);

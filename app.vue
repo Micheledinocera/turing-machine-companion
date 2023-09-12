@@ -17,7 +17,7 @@ const selectedRowRef=useSelectedRowRef();
 const isFixedRow=useIsFixedRow();
 
 const onScrollListener=(evt: any)=>{
-  isFixedRow.value=evt.target.scrollTop-(selectedRowRef.value?selectedRowRef.value.offsetTop:0)>-4
+  isFixedRow.value=evt.target.scrollTop-(selectedRowRef.value?selectedRowRef.value.offsetTop:0)>-54
 }
 
 onMounted(()=> {
@@ -65,6 +65,10 @@ body
 img
   &.loading
     @include loading-pulse
+    object-fit: contain !important
+    width: 100% !important
+    object-position: center !important
+    height: 100% !important
 @media (max-width: $breakpoint-tablet)
   .ps__rail-y
     display: none !important

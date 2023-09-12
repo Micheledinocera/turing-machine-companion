@@ -44,18 +44,18 @@
                 <div class="law-item" v-for="(law,lawIndex) in note.laws">
                     <div class="label-container">
                         <div class="key"> {{ law.key }} </div>
-                        <div class="law-id"> {{ gameInfo?.ind[lawIndex] }} </div>
+                        <div class="law-id" v-for="ind in extremeArrays(lawIndex).inds"> {{ ind }} </div>
                         <div :class="['rule-id','color_'+gameInfo?.color]">
                             {{ gameInfo?.crypt[lawIndex] }} 
                             <div class="icon"></div> 
                         </div>
                     </div>
-                    <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[lawIndex]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
-                        <img :src="getLawImageUrlLocale(gameInfo.ind[lawIndex])" :alt="'law_card_'+law" />
+                    <div class="law-container" v-for="ind in extremeArrays(lawIndex).inds" @click="()=>{selectedCard=ind??1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
+                        <img :src="getLawImageUrlLocale(ind??1)" :alt="'law_card_'+ind" />
                     </div>
                     <div class="conditions-container with-imgs">
-                        <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[gameInfo.ind[lawIndex]]">
-                            <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
+                        <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in law.possibilities">
+                            <img :class="['condition']" :src="getImageUrlLocale(possibility.value)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
                         </div>
                     </div>
                 </div>
@@ -75,8 +75,8 @@
                         <div class="label-container">
                             <div class="law-id"> {{ gameInfo?.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)] }} </div>
                         </div>
-                        <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[lawIndex]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
-                            <img :src="getLawImageUrlLocale(gameInfo.ind[lawIndex])" :alt="'law_card_'+law" />
+                        <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
+                            <img :src="getLawImageUrlLocale(gameInfo.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)])" :alt="'law_card_'+law" />
                         </div>
                         <div class="conditions-container with-imgs">
                             <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[gameInfo?.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)]]">
@@ -97,6 +97,7 @@ const selectedCard=useSelectedCard();
 const note=useNote();
 const gameInfoOk=useGameInfoOk();
 const gameInfo=useGameInfo();
+const randoms=useRandoms();
 const inputValues=ref(Object.values(LawType).map(()=>""));
 const { locale }= useI18n();
 
@@ -121,7 +122,7 @@ const inactiveAdd=(lawIndex:number)=>{
     return inputValues.value[lawIndex]==='' || note.value.laws[lawIndex].possibilities.find(possibility=>possibility.value==inputValues.value[lawIndex])
 }
 
-const getImageUrlLocale=(possibility:number)=>{
+const getImageUrlLocale=(possibility:number|string)=>{
     const lang=LANGUAGES.find(lang=>lang.iso==locale.value);
     const localeValue=lang?lang.value:"en";
     return IMG_URL.replaceAll('{locale}',localeValue.toUpperCase()).replace('{possibility}',possibility+"")
@@ -134,15 +135,13 @@ const getLawImageUrlLocale=(lawId:number)=>{
     return LAW_IMG_URL.replaceAll('{locale}',localeValue.toUpperCase()).replace('{lawId}',lawIdString)
 }
 
-// const shuffleInd=computed(()=>{
-//     if(gameInfo.value?.m==gameModes.nightmare)
-//         return inds.sort(() => 0.5 - Math.random())
-// })
+const extremeArrays=(lawIndex:number)=>{
+    var inds=[gameInfo.value?.ind[lawIndex],gameInfo.value?.fake[lawIndex]];
+    return {
+        inds:[inds[randoms.value[lawIndex]],inds[1-randoms.value[lawIndex]]]
+    }
+}
 
-onMounted(()=>{
-    if(gameInfo.value?.m==gameModes.nightmare)
-        note.value.laws.sort(() => 0.5 - Math.random())
-})
 </script>
 
 <style scoped lang="sass">
@@ -165,7 +164,7 @@ $small-item-height:12px
         .law-container
             overflow: hidden
             width: 100%
-            margin: auto
+            margin: 10px auto
             aspect-ratio: 3
             border-radius: 14px
             cursor: pointer
