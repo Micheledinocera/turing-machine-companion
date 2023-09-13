@@ -18,7 +18,7 @@
             </div>
         </template>
         <template v-else>
-            <div :class="['row',{'inactive':rowIndex!=selectedRowNote}]" v-for="(noteRow,rowIndex) in noteRows" :ref="el => { if(rowIndex==noteRows.length-1) selectedRowRef = el }" :key="'item_rownote_'+rowIndex">
+            <div :class="['row',{'inactive':rowIndex!=selectedRowNote}]" v-for="(noteRow,rowIndex) in noteRows" :ref="el => { if(rowIndex==noteRows.length-1) selectedRowRef = (el as HTMLElement) }" :key="'item_rownote_'+rowIndex" :id="'item_rownote_'+rowIndex">
                 <div class="select-row" @click="()=>selectedRowNote=rowIndex"></div>
                 <template v-for="menuIndex in arrayFromZeroToNumber(3)" :key="'item_'+noteRow.code[menuIndex]+'_'+menuIndex">
                     <div :class="['item',SHAPES[menuIndex]]" @click="()=>showMenu(menuIndex)"> 
@@ -41,7 +41,7 @@ import { NoteRow } from '~/composables/note';
 
 const note=useNote()
 const selectedRowNote=useSelectedRowNote();
-const selectedRowRef=useSelectedRowRef();
+const { selectedRowRef } = useFixedRow();
 const noteRows=computed(()=>note.value.noteRows as NoteRow[])
 const showMenuArray=ref([false,false,false])
 

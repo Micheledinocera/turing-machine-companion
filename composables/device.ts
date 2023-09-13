@@ -7,10 +7,18 @@ export enum DEVICES{
 export const useDevice = ()=>{
     const device=ref(DEVICES.desktop);
     const isNotDesktop=computed(()=>device.value==DEVICES.mobile || device.value==DEVICES.tablet);
+    
+    const getDeviceFromWidth=()=>{
+        if(window.innerWidth>768)
+            device.value= DEVICES.desktop
+        else
+            device.value= window.innerWidth>425?DEVICES.tablet:DEVICES.mobile
+    }
+
     onMounted(() =>{
-        device.value=getDeviceFromWidth();
+        getDeviceFromWidth();
         window.addEventListener("resize", () =>
-            device.value=getDeviceFromWidth()
+            getDeviceFromWidth()
         )}
     )
     return { isNotDesktop }

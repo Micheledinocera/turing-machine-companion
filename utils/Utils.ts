@@ -77,9 +77,3 @@ export const arrayFromOneToNumber=(n:number)=>{
 export const arrayFromZeroToNumber=(n:number)=>{
   return Array.from({length: n}, (_, i) => i) as number[]
 }
-export const getDeviceFromWidth=()=>{
-  if(window.innerWidth>768)
-    return DEVICES.desktop
-  else
-    return window.innerWidth>425?DEVICES.tablet:DEVICES.mobile
-}

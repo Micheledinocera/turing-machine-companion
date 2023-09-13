@@ -59,7 +59,8 @@ const selectedRowNote=useSelectedRowNote();
 const { t } = useI18n();
 const { notify }  = useNotification();
 const { isNotDesktop }=useDevice();
-const isFixedRow=useIsFixedRow();
+const {isFixedRow} = useFixedRow();
+
 const randoms=useRandoms();
 
 const inactive=computed(()=>

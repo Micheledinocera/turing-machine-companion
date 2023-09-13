@@ -13,11 +13,9 @@
 <script setup lang="ts">
 const showModal=useShowModal();
 const { locale }= useI18n();
-const selectedRowRef=useSelectedRowRef();
-const isFixedRow=useIsFixedRow();
-
-const onScrollListener=(evt: any)=>{
-  isFixedRow.value=evt.target.scrollTop-(selectedRowRef.value?selectedRowRef.value.offsetTop:0)>-54
+const { scrollTop } = useFixedRow();
+const onScrollListener=(evt: Event)=>{
+  scrollTop.value=(evt.target as HTMLElement).scrollTop;
 }
 
 onMounted(()=> {
@@ -28,7 +26,6 @@ onMounted(()=> {
     var filteredLang = LANGUAGES.find((item) => item.iso.startsWith(lan) );
     locale.value = filteredLang ? filteredLang.iso : "en";
   }
-
   window.addEventListener("beforeunload", (event) => {
     event.preventDefault();
     event.returnValue = "";
