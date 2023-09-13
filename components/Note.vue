@@ -46,22 +46,17 @@
 </template>
 
 <script setup lang="ts">
-import { LawType } from '#imports';
 import { useNotification } from "@kyvg/vue3-notification";
 
 const gameCode=ref("");
 const pendingGameInfo=ref(false);
-const gameInfo=useGameInfo();
-const { getGameInfo }=await useGetGameInfo();
+const { gameInfoOk,gameInfo,getGameInfo }=await useGameInfo();
 const note=useNote();
-const gameInfoOk=useGameInfoOk();
 const selectedRowNote=useSelectedRowNote();
 const { t } = useI18n();
 const { notify }  = useNotification();
 const { isNotDesktop }=useDevice();
 const {isFixedRow} = useFixedRow();
-
-const randoms=useRandoms();
 
 const inactive=computed(()=>
     note.value.noteRows.some(row=>row.verificators.filter(verificator=>verificator!==null).length<3)
@@ -78,30 +73,8 @@ const copyCode=()=>{
 }
 
 const getInfo=async ()=>{
-    gameInfoOk.value=null;
     pendingGameInfo.value=true;
-    gameInfo.value=(await getGameInfo(gameCode.value)).value;
-    if(gameInfo.value?.status=='bad') {
-        gameInfoOk.value=false
-        notify({title:t('ko'),type: "error"})
-    } else {
-        gameInfoOk.value=true;
-        note.value.laws=structuredClone([]);
-        gameInfo.value?.ind.forEach((law,lawIndex:number)=>{
-            note.value.laws.push({key:Object.keys(LawType)[lawIndex] as LawType,possibilities:[]})
-            const possibilities=LAWS_VERIFICATORS[law].map((verificator:number)=>({value:""+verificator,active:true}));
-            if(gameInfo.value?.m==gameModes.extreme){
-                randoms.value.push(Math.floor(Math.random() * 10)%2 as 0|1);
-                const fakeVerificators=structuredClone(LAWS_VERIFICATORS[gameInfo.value?gameInfo.value.fake[lawIndex]:0]);
-                const fakePossibilities=fakeVerificators.map((verificator:number)=>({value:""+verificator,active:true}));
-                note.value.laws[lawIndex].possibilities=randoms.value[lawIndex]?[...fakePossibilities,...possibilities]:[...possibilities,...fakePossibilities];
-            } else{
-                note.value.laws[lawIndex].possibilities=structuredClone(possibilities)
-            }
-        })
-        if(gameInfo.value?.m==gameModes.nightmare)
-            note.value.laws.sort(() => 0.5 - Math.random())
-    }
+    await getGameInfo(gameCode.value)
     pendingGameInfo.value=false;
     gameCode.value='';
 }

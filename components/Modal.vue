@@ -30,7 +30,7 @@ const modalType=useModalType();
 const selectedCard=useSelectedCard();
 const selectedRowNote=useSelectedRowNote();
 const note=useNote();
-const gameInfoOk=useGameInfoOk();
+const { gameInfoOk }=await useGameInfo();
 const { locale }= useI18n();
 
 const newGame=()=>{
