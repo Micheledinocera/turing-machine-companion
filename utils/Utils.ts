@@ -12,11 +12,6 @@ export const LANGUAGES=[
   {value:"kr",label:"한국어",iso:"ko"},
   {value:"cns",label:"简体中文",iso:"zh"}
 ];
-export enum DEVICES{
-  desktop="desktop",
-  tablet="tablet",
-  mobile="mobile",
-};
 export enum MODAL_TYPES{
   newGame="new-game",
   cardDetail="card-detail",
