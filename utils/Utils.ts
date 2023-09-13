@@ -1,3 +1,8 @@
+export enum MODAL_TYPES{
+  newGame="new-game",
+  cardDetail="card-detail",
+  credits="credits"
+};
 
 export const SHAPES=["triangle","square","circle"];
 export const LANGUAGES=[
@@ -12,11 +17,6 @@ export const LANGUAGES=[
   {value:"kr",label:"한국어",iso:"ko"},
   {value:"cns",label:"简体中文",iso:"zh"}
 ];
-export enum MODAL_TYPES{
-  newGame="new-game",
-  cardDetail="card-detail",
-  credits="credits"
-};
 export const VERIFICATOR_STATES=[null,true,false];
 export const LAWS_VERIFICATORS={
   1:[1,16],
