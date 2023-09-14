@@ -11,6 +11,7 @@
             </template>
             <template v-if="modalType==MODAL_TYPES.credits">
                 <div class="title"> {{$t('credits')}} </div>
+                <div class="line"> {{ $t('version') }} <span> {{ version }} </span> </div>
                 <div class="line"> {{ $t('madeWithLove') }} <a href="mailto:mdinocera.digital@gmail.com" target="_blank"> Michele Di Nocera </a> </div>
                 <div class="line"> {{ $t('allCreditsTo') }} <a href="https://www.scorpionmasque.com/" target="_blank"> Scorpion Masqué </a> </div>
                 <div class="line"> {{ $t('moreInfo') }} <a href="https://www.turingmachine.info/" target="_blank"> {{ $t('here') }} </a> </div>
@@ -30,6 +31,7 @@ const modalType=useModalType();
 const selectedCard=useSelectedCard();
 const selectedRowNote=useSelectedRowNote();
 const note=useNote();
+const version=await useVersion();
 const { gameInfoOk }=await useGameInfo();
 const { locale }= useI18n();
 
@@ -82,7 +84,7 @@ const getLawImageUrlLocale=(lawId:number)=>{
             margin: 20px 0
             font-size: 18px
             font-weight: 600
-            a
+            a,span
                 text-decoration: none
                 color:$primary-color
                 font-weight: 700
