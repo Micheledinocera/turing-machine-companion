@@ -77,3 +77,8 @@ export const arrayFromOneToNumber=(n:number)=>{
 export const arrayFromZeroToNumber=(n:number)=>{
   return Array.from({length: n}, (_, i) => i) as number[]
 }
+export const preloadImage=(url:string)=>
+{
+    var img=new Image();
+    img.src=url;
+}

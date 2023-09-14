@@ -1,5 +1,6 @@
 const path = require('path');
 let development = process.env.NODE_ENV !== 'production'
+let baseURL = development? "/" : "/turing-machine-companion/"
 import { resolve, dirname } from "node:path";
 import { fileURLToPath } from "url";
 import VueI18nVitePlugin from "@intlify/unplugin-vue-i18n/vite";
@@ -32,7 +33,7 @@ export default defineNuxtConfig({
     }
   },
   app: {
-    baseURL: development? "/" : "/turing-machine-companion/"
+    baseURL: baseURL
   },
   modules: [
     '@kevinmarrec/nuxt-pwa',
@@ -41,7 +42,7 @@ export default defineNuxtConfig({
     'nuxt-lazy-load'
   ],
   lazyLoad:{
-    defaultImage: development?'/icon.png':'/turing-machine-companion/icon.png',
+    defaultImage: baseURL+'icon.png',
     loadingClass: 'loading',
     loadedClass: 'loaded',
     appendClass: false,

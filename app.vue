@@ -26,6 +26,7 @@ onMounted(()=> {
     var filteredLang = LANGUAGES.find((item) => item.iso.startsWith(lan) );
     locale.value = filteredLang ? filteredLang.iso : "en";
   }
+  preloadImage("/icon.png");
   window.addEventListener("beforeunload", (event) => {
     event.preventDefault();
     event.returnValue = "";
