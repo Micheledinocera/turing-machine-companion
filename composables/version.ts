@@ -9,6 +9,6 @@ const readbleVersion=(data:Version|null)=>{
 }
 
 export const useVersion= async () => {
-    const { data } = await useLazyFetch<Version>('/metadata.json');
+    const { data } = await useFetch<Version>('/metadata.json');
     return readbleVersion(data.value)
 }

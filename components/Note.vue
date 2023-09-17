@@ -3,8 +3,8 @@
         <div class="add-container">
             <div class="game-info" v-if="!gameInfoOk && !pendingGameInfo">
                 <input type="text" :placeholder="t('gameCode')" v-model="gameCode" @keydown.enter="getInfo">
-                <div class="loader-container" v-if="pendingGameInfo"> <Loader/> </div>
-                <div :class="['get-info',{inactive:gameCode==''},{error:!gameInfoOk}]" @click="getInfo" v-else> {{buttonLabel}} </div>
+                <!-- <div class="loader-container" v-if="pendingGameInfo"> <Loader/> </div> -->
+                <div :class="['get-info',{inactive:gameCode==''},{error:!gameInfoOk}]" @click="getInfo"> {{buttonLabel}} </div>
             </div>
             <div class="game-info" v-else-if="gameInfoOk">
                 <div class="game-code" @click="copyCode"> {{ t('gameCode') }}: {{ gameInfo?.hash.replace(/\s/g, '') }} </div>

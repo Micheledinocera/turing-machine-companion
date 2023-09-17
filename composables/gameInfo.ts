@@ -34,7 +34,7 @@ export const useGameInfo= async () => {
         gameInfo.value=data.value;
         if(gameInfo.value?.status=='bad') {
             gameInfoOk.value=false
-            notify({title:t('ko'),type: "error"})
+            notify({title:t('wrongCode'),type: "error"})
         } else {
             gameInfoOk.value=true;
             note.value.laws=structuredClone([]);
