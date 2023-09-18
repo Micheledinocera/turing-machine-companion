@@ -1,10 +1,13 @@
 <template>
     <div class="note-container">
         <div class="add-container">
-            <div class="game-info" v-if="!gameInfoOk && !pendingGameInfo">
-                <input type="text" :placeholder="t('gameCode')" v-model="gameCode" @keydown.enter="getInfo">
-                <!-- <div class="loader-container" v-if="pendingGameInfo"> <Loader/> </div> -->
-                <div :class="['get-info',{inactive:gameCode==''},{error:!gameInfoOk}]" @click="getInfo"> {{buttonLabel}} </div>
+            <div class="game-info-container" v-if="!gameInfoOk && !pendingGameInfo">
+                <div class="create-game" @click="()=>{showModal=true;modalType=MODAL_TYPES.createGame}"> Crea Partita </div>
+                <div class="oppure"> Oppure </div>
+                <div class="game-info">
+                    <input type="text" :placeholder="t('gameCode')" v-model="gameCode" @keydown.enter="getInfo">
+                    <div :class="['get-info',{inactive:gameCode==''},{error:!gameInfoOk}]" @click="getInfo"> {{buttonLabel}} </div>
+                </div>
             </div>
             <div class="game-info" v-else-if="gameInfoOk">
                 <div class="game-code" @click="copyCode"> {{ t('gameCode') }}: {{ gameInfo?.hash.replace(/\s/g, '') }} </div>
@@ -56,7 +59,9 @@ const selectedRowNote=useSelectedRowNote();
 const { t } = useI18n();
 const { notify }  = useNotification();
 const { isNotDesktop }=useDevice();
-const {isFixedRow} = useFixedRow();
+const { isFixedRow } = useFixedRow();
+const showModal=useShowModal();
+const modalType=useModalType();
 
 const inactive=computed(()=>
     note.value.noteRows.some(row=>row.verificators.filter(verificator=>verificator!==null).length<3)
@@ -94,6 +99,19 @@ const buttonLabel=computed(()=>{
         display: flex
         height: calc($base-height/2)
         margin: 10px
+        .game-info-container
+            margin: auto
+            text-align: center
+            .create-game
+                background-color: $primary-color
+                border-radius: 8px
+                color: white
+                cursor: pointer
+                font-size: 22px
+                padding: 8px 10px
+                font-weight: 600
+            .oppure
+                margin: 10px 0
         .game-info
             display: flex
             margin: auto

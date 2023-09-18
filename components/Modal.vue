@@ -9,7 +9,7 @@
                     <div class="ok" @click="()=>newGame()"> {{$t('ok')}} </div>
                 </div>
             </template>
-            <template v-if="modalType==MODAL_TYPES.credits">
+            <template v-else-if="modalType==MODAL_TYPES.credits">
                 <div class="title"> {{$t('credits')}} </div>
                 <div class="line"> {{ $t('nonOfficial') }} </div>
                 <div class="line"> {{ $t('madeWithLove') }} <a href="mailto:mdinocera.digital@gmail.com" target="_blank"> Michele Di Nocera </a> </div>
@@ -20,6 +20,15 @@
             <template v-else-if="modalType==MODAL_TYPES.cardDetail">
                 <div class="img-container">
                     <img :src="getLawImageUrlLocale(selectedCard)" alt="">
+                </div>
+            </template>
+            <template v-else-if="modalType==MODAL_TYPES.createGame">
+                <Selector :label="'Modalità'" :values="Object.keys(gameModes)" :selectedValue="selectedMode" @changed-value="(value)=>selectedMode=value"/>
+                <Selector :label="'Difficoltà'" :values="Object.keys(gameDifficulties)" :selectedValue="selectedDifficulty" @changed-value="(value)=>selectedDifficulty=value"/>
+                <Selector :label="'Verificatori'" :values="['4','5','6']" :selectedValue="selectedVerificatore" @changed-value="(value)=>selectedVerificatore=value"/>
+                <div class="create-container">
+                    <div class="create" @click="createGame" v-if="!isCreatingGame"> Create Game </div>
+                    <Loader v-else/>
                 </div>
             </template>
         </div>
@@ -33,8 +42,12 @@ const selectedCard=useSelectedCard();
 const selectedRowNote=useSelectedRowNote();
 const note=useNote();
 const version=await useVersion();
-const { gameInfoOk }=await useGameInfo();
+const { createGameAction,gameInfoOk }=await useGameInfo();
 const { locale }= useI18n();
+const selectedMode=ref(Object.keys(gameModes)[0]);
+const selectedDifficulty=ref(Object.keys(gameDifficulties)[0]);
+const selectedVerificatore=ref("4") as Ref<"4"|"5"|"6">;
+const isCreatingGame=ref(false);
 
 const newGame=()=>{
     note.value=structuredClone(EMPTY_NOTE);
@@ -49,6 +62,21 @@ const getLawImageUrlLocale=(lawId:number)=>{
     const localeValue=lang?lang.value:"en";
     return LAW_IMG_URL.replaceAll('{locale}',localeValue.toUpperCase()).replace('{lawId}',lawIdString)
 }
+
+const createGame=async ()=>{
+    isCreatingGame.value=true;
+    await createGameAction(gameModes[selectedMode.value as unknown as keyof typeof gameModes],gameDifficulties[selectedDifficulty.value as unknown as keyof typeof gameDifficulties],selectedVerificatore.value)
+    isCreatingGame.value=false;
+    showModal.value=false;
+    selectedRowNote.value=0;
+}
+
+onMounted(()=>{
+    selectedMode.value=Object.keys(gameModes)[0];
+    selectedDifficulty.value=Object.keys(gameDifficulties)[0];
+    selectedVerificatore.value="4";
+})
+
 </script>
 
 <style scoped lang="sass">
@@ -105,4 +133,15 @@ const getLawImageUrlLocale=(lawId:number)=>{
                     background-color: $red
         .img-container img
             width: 100%
+        .create-container
+            display: flex
+            .create
+                background-color: $primary-color
+                border-radius: 8px
+                color: white
+                cursor: pointer
+                padding: 8px 10px
+                margin: 20px auto
+            .loader
+                margin: 20px auto
 </style>
