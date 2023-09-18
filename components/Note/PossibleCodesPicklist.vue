@@ -9,6 +9,9 @@
                 <div class="value"> {{value}} </div> 
             </div>
         </div>
+        <div class="check-code" v-if="note.possibleCodes[0].length==4 && note.possibleCodes[1].length==4 && note.possibleCodes[2].length==4" @click="()=>{showModal=true;modalType=MODAL_TYPES.checkCodeSure}">
+            {{ $t('checkCode') }}
+        </div>
     </div>
 </template>
 
@@ -16,6 +19,8 @@
 const note=useNote();
 const isCollapsed=ref(true);
 const { isNotDesktop }=useDevice();
+const showModal=useShowModal();
+const modalType=useModalType();
 
 const isInactive=(value:number,position:number)=>{
     return note.value.possibleCodes[position].includes(value)
@@ -34,16 +39,24 @@ const setCode=(value:number,position:number)=>{
 <style scoped lang="sass">
 .possible-codes-picklist
     width: $left-width
+    padding-bottom: 10px
     margin-left: 10px
     margin-top: 20px
     font-weight: 600
-    padding: 0 0 10px 0
     border: solid 2px $primary-color
     border-radius: 8px
     transition: all 0.5s ease-in-out
+    .check-code
+        padding: 6px 0
+        text-align: center
+        background-color: $primary-color
+        color: white
+        margin-top: 10px
     &.collapsed
         min-height: 20px
         padding: 0
+        .check-code
+            margin-top: 0
         .collapse .icon
             transform: rotate(0deg)
         .row

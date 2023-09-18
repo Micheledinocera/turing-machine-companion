@@ -1,9 +1,9 @@
 <template>
-    <div class="note-container">
+    <div :class="['note-container',{'disabled':gameChecked}]">
         <div class="add-container">
             <div class="game-info-container" v-if="!gameInfoOk && !pendingGameInfo">
-                <div class="create-game" @click="()=>{showModal=true;modalType=MODAL_TYPES.createGame}"> Crea Partita </div>
-                <div class="oppure"> Oppure </div>
+                <div class="create-game" @click="()=>{showModal=true;modalType=MODAL_TYPES.createGame}"> {{ $t('createGame') }} </div>
+                <div class="oppure"> {{ $t('or') }} </div>
                 <div class="game-info">
                     <input type="text" :placeholder="t('gameCode')" v-model="gameCode" @keydown.enter="getInfo">
                     <div :class="['get-info',{inactive:gameCode==''},{error:!gameInfoOk}]" @click="getInfo"> {{buttonLabel}} </div>
@@ -62,6 +62,7 @@ const { isNotDesktop }=useDevice();
 const { isFixedRow } = useFixedRow();
 const showModal=useShowModal();
 const modalType=useModalType();
+const gameChecked=useGameChecked();
 
 const inactive=computed(()=>
     note.value.noteRows.some(row=>row.verificators.filter(verificator=>verificator!==null).length<3)
@@ -95,6 +96,9 @@ const buttonLabel=computed(()=>{
 <style scoped lang="sass">
 .note-container 
     margin-top: 10px
+    &.disabled
+        pointer-events: none
+        opacity: 0.5
     .add-container
         display: flex
         height: calc($base-height/2)

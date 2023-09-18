@@ -23,13 +23,25 @@
                 </div>
             </template>
             <template v-else-if="modalType==MODAL_TYPES.createGame">
-                <Selector :label="'Modalità'" :values="Object.keys(gameModes)" :selectedValue="selectedMode" @changed-value="(value)=>selectedMode=value"/>
-                <Selector :label="'Difficoltà'" :values="Object.keys(gameDifficulties)" :selectedValue="selectedDifficulty" @changed-value="(value)=>selectedDifficulty=value"/>
-                <Selector :label="'Verificatori'" :values="['4','5','6']" :selectedValue="selectedVerificatore" @changed-value="(value)=>selectedVerificatore=value"/>
+                <div class="title"> {{$t('createGame')}} </div>
+                <Selector :label="'mode'" :values="Object.keys(gameModes)" :selectedValue="selectedMode" @changed-value="(value)=>selectedMode=value"/>
+                <Selector :label="'difficulty'" :values="Object.keys(gameDifficulties)" :selectedValue="selectedDifficulty" @changed-value="(value)=>selectedDifficulty=value"/>
+                <Selector :label="'verificators'" :values="['4','5','6']" :selectedValue="selectedVerificatore" @changed-value="(value)=>selectedVerificatore=value"/>
                 <div class="create-container">
-                    <div class="create" @click="createGame" v-if="!isCreatingGame"> Create Game </div>
+                    <div class="create" @click="createGame" v-if="!isCreatingGame"> {{$t('createGame')}} </div>
                     <Loader v-else/>
                 </div>
+            </template>
+            <template v-else-if="modalType==MODAL_TYPES.checkCodeSure">
+                <div class="title"> {{$t('areYouSure')}} </div>
+                <div class="buttons">
+                    <div class="cancel" @click="showModal=false"> {{$t('cancel')}} </div>
+                    <div class="ok" @click="()=>{modalType=MODAL_TYPES.checkCode;gameChecked=true;}"> {{$t('ok')}} </div>
+                </div>
+            </template>
+            <template v-else-if="modalType==MODAL_TYPES.checkCode">
+                <div class="title"> {{$t('codeCheck')}} </div>
+                <div :class="['response',gameInfo?.code==getCodeFromNote?'ok':'ko']"> {{gameInfo?.code==getCodeFromNote?$t('codeOk'):$t('codeWrong')}}</div>
             </template>
         </div>
     </div>
@@ -42,14 +54,16 @@ const selectedCard=useSelectedCard();
 const selectedRowNote=useSelectedRowNote();
 const note=useNote();
 const version=await useVersion();
-const { createGameAction,gameInfoOk }=await useGameInfo();
+const { createGameAction,gameInfoOk,gameInfo }=await useGameInfo();
 const { locale }= useI18n();
 const selectedMode=ref(Object.keys(gameModes)[0]);
 const selectedDifficulty=ref(Object.keys(gameDifficulties)[0]);
 const selectedVerificatore=ref("4") as Ref<"4"|"5"|"6">;
 const isCreatingGame=ref(false);
+const gameChecked=useGameChecked();
 
 const newGame=()=>{
+    gameChecked.value=false;
     note.value=structuredClone(EMPTY_NOTE);
     selectedRowNote.value=0;
     showModal.value=false;
@@ -70,6 +84,13 @@ const createGame=async ()=>{
     showModal.value=false;
     selectedRowNote.value=0;
 }
+
+const getCodeFromNote=computed(()=>{
+    const triangle=arrayFromOneToNumber(5).find(number=>!note.value.possibleCodes[0].includes(number)) as number
+    const square=arrayFromOneToNumber(5).find(number=>!note.value.possibleCodes[1].includes(number)) as number
+    const circle=arrayFromOneToNumber(5).find(number=>!note.value.possibleCodes[2].includes(number)) as number
+    return triangle*100+square*10+circle
+})
 
 onMounted(()=>{
     selectedMode.value=Object.keys(gameModes)[0];

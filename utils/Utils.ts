@@ -3,7 +3,8 @@ export enum MODAL_TYPES{
   cardDetail="card-detail",
   credits="credits",
   createGame="create-game",
-  checkCode="check-code"
+  checkCode="check-code",
+  checkCodeSure="check-code-sure",
 };
 
 export const SHAPES=["triangle","square","circle"];
