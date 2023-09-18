@@ -45,7 +45,7 @@ export const useGameInfo= async () => {
         const url='https://turingmachine.info/api/api.php?m='+mode+'&d='+difficulty+'&n='+verificators;
         gameInfoOk.value=null;
         const { data } = await useFetch<GameInfo>(url);
-        handleGameInfoFromRest(data,'somenthingWentWrong');
+        handleGameInfoFromRest(data,'somethingWentWrong');
     }
 
     const handleGameInfoFromRest=(gameInfoData:Ref<GameInfo | null>,errorLabel:string)=>{

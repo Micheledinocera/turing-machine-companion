@@ -3,7 +3,7 @@
         <div class="modal-content" @click.stop="">
             <div class="close" @click="showModal=false"> X </div>
             <template v-if="modalType==MODAL_TYPES.newGame">
-                <div class="title"> {{$t('newGame')}} </div>
+                <div class="title"> {{$t('newGame')}}? </div>
                 <div class="buttons">
                     <div class="cancel" @click="showModal=false"> {{$t('cancel')}} </div>
                     <div class="ok" @click="()=>newGame()"> {{$t('ok')}} </div>
@@ -40,8 +40,12 @@
                 </div>
             </template>
             <template v-else-if="modalType==MODAL_TYPES.checkCode">
-                <div class="title"> {{$t('codeCheck')}} </div>
-                <div :class="['response',gameInfo?.code==getCodeFromNote?'ok':'ko']"> {{gameInfo?.code==getCodeFromNote?$t('codeOk'):$t('codeWrong')}}</div>
+                <div class="title"> {{$t('checkCode')}} </div>
+                <div :class="['response',gameInfo?.code==getCodeFromNote?'ok':'ko']"> {{gameInfo?.code==getCodeFromNote?$t('correctSolution'):$t('wrongSolution')}}</div>
+                <div class="buttons">
+                    <!-- <div class="cancel" @click="showModal=false"> {{$t('cancel')}} </div> -->
+                    <div class="ok" @click="()=>newGame()"> {{$t('newGame')}} </div>
+                </div>
             </template>
         </div>
     </div>
@@ -165,4 +169,10 @@ onMounted(()=>{
                 margin: 20px auto
             .loader
                 margin: 20px auto
+        .response
+            margin-top: 10px
+            &.ko
+                color: $red
+            &.ok
+                color: $primary-color
 </style>

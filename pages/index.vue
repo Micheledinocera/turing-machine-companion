@@ -6,7 +6,7 @@
 const { t } = useI18n();
 
 useHead({
-    title:t('tmc')
+    title:'Turing Machine Companion'
 })
 </script>
 
