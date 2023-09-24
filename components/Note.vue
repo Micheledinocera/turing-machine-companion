@@ -12,18 +12,18 @@
             <div class="game-info" v-else-if="gameInfoOk">
                 <div class="game-code" @click="copyCode"> {{ t('gameCode') }}: {{ gameInfo?.hash.replace(/\s/g, '') }} </div>
             </div>
-            <div :class="['add',{inactive:inactive}]" @click="addEmptyNote" v-if="gameInfoOk"> {{t('newNoteRow')}} </div>
+            <!-- <div :class="['add',{inactive:inactive}]" @click="addEmptyNote" v-if="gameInfoOk"> {{t('newNoteRow')}} </div> -->
         </div>
         <template v-if="gameInfoOk">
             <template v-if="isNotDesktop">
-                <div class="row fixed" v-if="isFixedRow">
+                <div class="row fixed with-button" v-if="isFixedRow">
                     <CombinationsTable :fixed="true"/>
                     <VerificationsChecklist :fixed="true"/>
                 </div>
                 <div class="row">
                     <PossibleCodesPicklist />
                 </div>
-                <div class="row">
+                <div class="row with-button">
                     <CombinationsTable/>
                     <VerificationsChecklist/>
                 </div>
@@ -64,14 +64,14 @@ const showModal=useShowModal();
 const modalType=useModalType();
 const gameChecked=useGameChecked();
 
-const inactive=computed(()=>
-    note.value.noteRows.some(row=>row.verificators.filter(verificator=>verificator!==null).length<3)
-)
+// const inactive=computed(()=>
+//     note.value.noteRows.some(row=>row.verificators.filter(verificator=>verificator!==null).length<3)
+// )
 
-const addEmptyNote=()=>{
-    note.value.noteRows=[...note.value.noteRows,structuredClone(EMPTY_NOTE_ROW)];
-    selectedRowNote.value=note.value.noteRows.length-1;
-}
+// const addEmptyNote=()=>{
+//     note.value.noteRows=[...note.value.noteRows,structuredClone(EMPTY_NOTE_ROW)];
+//     selectedRowNote.value=note.value.noteRows.length-1;
+// }
 
 const copyCode=()=>{
     navigator.clipboard.writeText(gameInfo.value?gameInfo.value?.hash:'');
@@ -176,6 +176,8 @@ const buttonLabel=computed(()=>{
             z-index: 1
             top:$base-height
             background-color: $primary-color-light 
+        &.with-button
+            padding-bottom: 40px
     .splash-screen
         height: calc(100vh - 160px)
         @include background-standard
