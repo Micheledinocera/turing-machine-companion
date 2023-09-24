@@ -108,7 +108,7 @@ const getCodeFromNote=computed(()=>{
     return triangle*100+square*10+circle
 })
 
-const shareLink=computed(()=> location.origin+"?code="+gameInfo.value?.hash.replace(/\s/g, ''))
+const shareLink=computed(()=> location.origin+location.pathname+"?code="+gameInfo.value?.hash.replace(/\s/g, ''))
 
 const share=()=>{
     navigator.clipboard.writeText(shareLink.value);
@@ -195,15 +195,18 @@ onMounted(()=>{
             &.ok
                 color: $primary-color
         .share
-            margin: 10px 0
-            display: flex
+            margin: 10px auto
+            display: table
             .icon
                 @include background-standard
                 background-image: url('~/assets/imgs/share.svg')
-                display: inline-flex
                 width: 30px
                 height: 30px
-                margin: 0 10px
+                display: table-cell
+                padding: 0 10px
         &:deep(.qrcode)
-            margin: 20px 0
+            margin: 20px auto
+            width: fit-content
+            img
+                width: 100%
 </style>
