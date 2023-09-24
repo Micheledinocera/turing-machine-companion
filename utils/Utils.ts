@@ -5,6 +5,50 @@ export enum MODAL_TYPES{
   createGame="create-game",
   checkCode="check-code",
   checkCodeSure="check-code-sure",
+  shareCode="share-code",
+};
+
+export const DOTS_OPTIONS= {
+  "type": "square",
+  "color": "#33b663",
+  "gradient": {
+    "type": "radial",
+    "rotation": 0,
+    "colorStops": [
+      {
+        "offset": 0,
+        "color": "#33b663"
+      },
+      {
+        "offset": 1,
+        "color": "#1e8b49"
+      }
+    ]
+  }
+};
+
+export const CORNERS_SQUARE_OPTIONS= {
+  "type": "square",
+  "color": "#1e8b49",
+  "gradient": null
+};
+
+export const CORNERS_DOT_OPTIONS= {
+  "type": "square",
+  "gradient": {
+    "type": "radial",
+    "rotation": 0,
+    "colorStops": [
+      {
+        "offset": 0,
+        "color": "#69ca8c"
+      },
+      {
+        "offset": 1,
+        "color": "#21914c"
+      }
+    ]
+  }
 };
 
 export const SHAPES=["triangle","square","circle"];

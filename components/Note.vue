@@ -10,9 +10,10 @@
                 </div>
             </div>
             <div class="game-info" v-else-if="gameInfoOk">
-                <div class="game-code" @click="copyCode"> {{ t('gameCode') }}: {{ gameInfo?.hash.replace(/\s/g, '') }} </div>
+                <div class="game-code" @click="()=>{showModal=true;modalType=MODAL_TYPES.shareCode}"> {{ $t('gameCode') }}: {{ gameInfo?.hash.replace(/\s/g, '') }} </div>
+                <!-- <div class="game-code" @click="copyCode"> {{ t('gameCode') }}: {{ gameInfo?.hash.replace(/\s/g, '') }} </div> -->
             </div>
-            <div :class="['add']" @click="addEmptyNote" v-if="gameInfoOk && !isNotDesktop"> {{t('newNoteRow')}} </div>
+            <div :class="['add']" @click="addEmptyNote" v-if="gameInfoOk && !isNotDesktop"> {{$t('newNoteRow')}} </div>
         </div>
         <template v-if="gameInfoOk">
             <template v-if="isNotDesktop">
@@ -49,7 +50,6 @@
 </template>
 
 <script setup lang="ts">
-import { useNotification } from "@kyvg/vue3-notification";
 
 const gameCode=ref("");
 const pendingGameInfo=ref(false);
@@ -57,8 +57,8 @@ const { gameInfoOk,gameInfo,getGameInfo }=await useGameInfo();
 const note=useNote();
 const selectedRowNote=useSelectedRowNote();
 const { t } = useI18n();
-const { notify }  = useNotification();
 const { isNotDesktop }=useDevice();
+const route =useRoute();
 const { isFixedRow } = useFixedRow();
 const showModal=useShowModal();
 const modalType=useModalType();
@@ -67,11 +67,6 @@ const gameChecked=useGameChecked();
 const addEmptyNote=()=>{
     note.value.noteRows=[...note.value.noteRows,structuredClone(EMPTY_NOTE_ROW)];
     selectedRowNote.value=note.value.noteRows.length-1;
-}
-
-const copyCode=()=>{
-    navigator.clipboard.writeText(gameInfo.value?gameInfo.value?.hash:'');
-    notify({title:t('copied'),type: "success"})
 }
 
 const getInfo=async ()=>{
@@ -86,6 +81,11 @@ const buttonLabel=computed(()=>{
         return t('getInfo')
     return gameInfoOk.value?t('ok'):t('ko')
 })
+
+if(route.query.code){
+    gameCode.value=route.query.code as string;
+    getInfo();
+}
 
 </script>
 

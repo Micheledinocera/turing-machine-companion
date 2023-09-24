@@ -2,7 +2,7 @@
     <div class="selector-container">
         <div class="label"> {{ $t(label) }} </div>
         <div class="selector"> 
-            <div :class="['value',{selected:selectedValue==value}]" v-for="value in values" :key="label+'_'+value" @click="()=>{console.log(value);$emit('changedValue',value)}"> {{$t(value)}} </div>
+            <div :class="['value',{selected:selectedValue==value}]" v-for="value in values" :key="label+'_'+value" @click="()=>{$emit('changedValue',value)}"> {{$t(value)}} </div>
         </div>
     </div>
 </template>

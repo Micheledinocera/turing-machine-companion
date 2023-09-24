@@ -39,11 +39,22 @@
                     <div class="ok" @click="()=>{modalType=MODAL_TYPES.checkCode;gameChecked=true;}"> {{$t('ok')}} </div>
                 </div>
             </template>
+            <template v-else-if="modalType==MODAL_TYPES.shareCode">
+                <div class="title"> {{$t('share')}} </div>
+                <div class="share" @click="share">  {{ $t('gameCode') }}: {{ gameInfo?.hash.replace(/\s/g, '') }} <span class="icon"></span> </div>
+                <qrcode 
+                    myclass="qrcode"
+                    :value="shareLink"
+                    image="icon.png"
+                    :dotsOptions="DOTS_OPTIONS"
+                    :cornersSquareOptions="CORNERS_SQUARE_OPTIONS"
+                    :cornersDotOptions="CORNERS_DOT_OPTIONS"
+                />
+            </template>
             <template v-else-if="modalType==MODAL_TYPES.checkCode">
                 <div class="title"> {{$t('checkCode')}} </div>
                 <div :class="['response',gameInfo?.code==getCodeFromNote?'ok':'ko']"> {{gameInfo?.code==getCodeFromNote?$t('correctSolution'):$t('wrongSolution')}}</div>
                 <div class="buttons">
-                    <!-- <div class="cancel" @click="showModal=false"> {{$t('cancel')}} </div> -->
                     <div class="ok" @click="()=>newGame()"> {{$t('newGame')}} </div>
                 </div>
             </template>
@@ -52,6 +63,7 @@
 </template>
 
 <script setup lang="ts">
+
 const showModal=useShowModal();
 const modalType=useModalType();
 const selectedCard=useSelectedCard();
@@ -95,6 +107,13 @@ const getCodeFromNote=computed(()=>{
     const circle=arrayFromOneToNumber(5).find(number=>!note.value.possibleCodes[2].includes(number)) as number
     return triangle*100+square*10+circle
 })
+
+const shareLink=computed(()=> location.origin+"?code="+gameInfo.value?.hash.replace(/\s/g, ''))
+
+const share=()=>{
+    navigator.clipboard.writeText(shareLink.value);
+    navigator.share({ title: "Turing Machine Companion", url: shareLink.value })
+}
 
 onMounted(()=>{
     selectedMode.value=Object.keys(gameModes)[0];
@@ -175,4 +194,16 @@ onMounted(()=>{
                 color: $red
             &.ok
                 color: $primary-color
+        .share
+            margin: 10px 0
+            display: flex
+            .icon
+                @include background-standard
+                background-image: url('~/assets/imgs/share.svg')
+                display: inline-flex
+                width: 30px
+                height: 30px
+                margin: 0 10px
+        &:deep(.qrcode)
+            margin: 20px 0
 </style>

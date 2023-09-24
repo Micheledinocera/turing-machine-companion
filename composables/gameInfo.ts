@@ -37,7 +37,7 @@ export const useGameInfo= async () => {
     const getGameInfo = async (code : string) => {
         const url='https://turingmachine.info/api/api.php?h='+code;
         gameInfoOk.value=null;
-        const { data } = await useFetch<GameInfo>(url);
+        const { data } = await useFetch<GameInfo>(url,{ server: false });
         handleGameInfoFromRest(data,'wrongCode');
     }
 
@@ -50,7 +50,7 @@ export const useGameInfo= async () => {
 
     const handleGameInfoFromRest=(gameInfoData:Ref<GameInfo | null>,errorLabel:string)=>{
         gameInfo.value=gameInfoData.value;
-        if(gameInfo.value?.status=='bad') {
+        if(!gameInfo.value || gameInfo.value?.status=='bad') {
             gameInfoOk.value=false
             notify({title:t(errorLabel),type: "error"})
             return 
