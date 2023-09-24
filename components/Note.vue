@@ -84,7 +84,7 @@ const buttonLabel=computed(()=>{
 
 if(route.query.code){
     gameCode.value=route.query.code as string;
-    getInfo();
+    await getInfo();
 }
 
 </script>

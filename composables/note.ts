@@ -46,5 +46,5 @@ export const EMPTY_NOTE={
     laws:structuredClone(EMPTY_LAWS)
 } as Note
 
-export const useNote = () => useState<Note>('note',()=>EMPTY_NOTE)
+export const useNote = () => useState<Note>('note',()=>structuredClone(EMPTY_NOTE))
 export const useSelectedRowNote = () => useState<number>('selectedRowNote',()=>0)
