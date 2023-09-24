@@ -73,6 +73,10 @@
                 <div class="law-items">
                     <div class="law-item" v-for="(law,lawIndex) in note.laws">
                         <div class="label-container">
+                            <div class="labels">
+                                <LabelItem :value="Object.keys(LawType)[law]" v-for="(law) in arrayFromZeroToNumber(gameInfo?.ind.length)"/>
+                                <!-- <div :class="['label',{inactive:inactive}]" v-for="(law) in arrayFromZeroToNumber(gameInfo?.ind.length)" @click="()=>inactive=!inactive"> {{ Object.keys(LawType)[law] }} </div> -->
+                            </div>
                             <div class="law-id"> {{ gameInfo?.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)] }} </div>
                         </div>
                         <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
@@ -309,4 +313,12 @@ $small-item-height:12px
         .labels-container
             display: flex
             flex-wrap: wrap
+            .label-container
+                width: 25%
+        .label-container .labels
+            width: 100%
+            display: flex
+            flex-wrap: wrap
+            font-size: 20px
+            text-align: center
 </style>
