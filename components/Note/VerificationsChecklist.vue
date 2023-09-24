@@ -18,7 +18,7 @@
                     </div>
                 </div>
             </template>
-            <div :class="['add']" @click="addEmptyNote" > {{t('newNoteRow')}} </div>
+            <div v-if="isNotDesktop" :class="['add']" @click="addEmptyNote" > {{t('newNoteRow')}} </div>
         </div>
     </div>
 </template>
@@ -32,6 +32,7 @@ import { NoteRow } from '~/composables/note';
 const { t } = useI18n();
 const note=useNote();
 const selectedRowNote=useSelectedRowNote();
+const { isNotDesktop }=useDevice();
 const noteRows=computed(()=>note.value.noteRows as NoteRow[])
 
 const checkboxClass=(value: boolean|null)=>{

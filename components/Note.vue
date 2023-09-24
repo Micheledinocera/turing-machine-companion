@@ -12,7 +12,7 @@
             <div class="game-info" v-else-if="gameInfoOk">
                 <div class="game-code" @click="copyCode"> {{ t('gameCode') }}: {{ gameInfo?.hash.replace(/\s/g, '') }} </div>
             </div>
-            <!-- <div :class="['add',{inactive:inactive}]" @click="addEmptyNote" v-if="gameInfoOk"> {{t('newNoteRow')}} </div> -->
+            <div :class="['add']" @click="addEmptyNote" v-if="gameInfoOk && !isNotDesktop"> {{t('newNoteRow')}} </div>
         </div>
         <template v-if="gameInfoOk">
             <template v-if="isNotDesktop">
@@ -64,14 +64,10 @@ const showModal=useShowModal();
 const modalType=useModalType();
 const gameChecked=useGameChecked();
 
-// const inactive=computed(()=>
-//     note.value.noteRows.some(row=>row.verificators.filter(verificator=>verificator!==null).length<3)
-// )
-
-// const addEmptyNote=()=>{
-//     note.value.noteRows=[...note.value.noteRows,structuredClone(EMPTY_NOTE_ROW)];
-//     selectedRowNote.value=note.value.noteRows.length-1;
-// }
+const addEmptyNote=()=>{
+    note.value.noteRows=[...note.value.noteRows,structuredClone(EMPTY_NOTE_ROW)];
+    selectedRowNote.value=note.value.noteRows.length-1;
+}
 
 const copyCode=()=>{
     navigator.clipboard.writeText(gameInfo.value?gameInfo.value?.hash:'');
