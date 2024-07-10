@@ -34,9 +34,11 @@
 </template>
 
 <script setup lang="ts">
+
 defineProps<{
   fixed?: boolean
 }>()
+
 import { NoteRow } from '~/composables/note';
 
 const note=useNote()

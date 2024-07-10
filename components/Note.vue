@@ -1,91 +1,78 @@
 <template>
     <div :class="['note-container',{'disabled':gameChecked}]">
-        <div class="add-container">
-            <div class="game-info-container" v-if="!gameInfoOk && !pendingGameInfo">
-                <div class="create-game" @click="()=>{showModal=true;modalType=MODAL_TYPES.createGame}"> {{ $t('createGame') }} </div>
-                <div class="oppure"> {{ $t('or') }} </div>
-                <div class="game-info">
-                    <input type="text" :placeholder="t('gameCode')" v-model="gameCode" @keydown.enter="getInfo">
-                    <div :class="['get-info',{inactive:gameCode==''},{error:!gameInfoOk}]" @click="getInfo"> {{buttonLabel}} </div>
-                </div>
-            </div>
-            <div class="game-info" v-else-if="gameInfoOk">
-                <div class="game-code" @click="()=>{showModal=true;modalType=MODAL_TYPES.shareCode}"> {{ $t('gameCode') }}: {{ gameInfo?.hash.replace(/\s/g, '') }} </div>
-                <!-- <div class="game-code" @click="copyCode"> {{ t('gameCode') }}: {{ gameInfo?.hash.replace(/\s/g, '') }} </div> -->
-            </div>
-            <div :class="['add']" @click="addEmptyNote" v-if="gameInfoOk && !isNotDesktop"> {{$t('newNoteRow')}} </div>
+        <div class="add-container" v-if="!isNotDesktop">
+            <div :class="['add']" @click="addEmptyNote"> {{$t('newNoteRow')}} </div>
         </div>
-        <template v-if="gameInfoOk">
-            <template v-if="isNotDesktop">
-                <div class="row fixed with-button" v-if="isFixedRow">
-                    <CombinationsTable :fixed="true"/>
-                    <VerificationsChecklist :fixed="true"/>
-                </div>
-                <div class="row">
-                    <PossibleCodesPicklist />
-                </div>
-                <div class="row with-button">
-                    <CombinationsTable/>
-                    <VerificationsChecklist/>
-                </div>
-                <div class="row">
-                    <LawsContainer />
-                </div>
-            </template>
-            <template v-else>
-                <div class="row">
-                    <CombinationsTable />
-                    <VerificationsChecklist />
-                </div>
-                <div class="row">
-                    <PossibleCodesPicklist />
-                    <LawsContainer />
-                </div>
-            </template>
+        <template v-if="isNotDesktop">
+            <div class="row fixed with-button" v-if="isFixedRow">
+                <CombinationsTable :fixed="true"/>
+                <VerificationsChecklist :fixed="true"/>
+            </div>
+            <div class="row">
+                <PossibleCodesPicklist />
+            </div>
+            <div class="row with-button">
+                <CombinationsTable/>
+                <VerificationsChecklist/>
+            </div>
+            <div class="row">
+                <LawsContainer />
+            </div>
         </template>
         <template v-else>
-            <div :class="['splash-screen',{'loading':pendingGameInfo}]"></div>
+            <div class="row">
+                <CombinationsTable />
+                <VerificationsChecklist />
+            </div>
+            <div class="row">
+                <PossibleCodesPicklist />
+                <LawsContainer />
+            </div>
         </template>
     </div>
 </template>
 
 <script setup lang="ts">
 
-const gameCode=ref("");
-const pendingGameInfo=ref(false);
-const { gameInfoOk,gameInfo,getGameInfo }=await useGameInfo();
+// const gameCode=ref("");
+// const pendingGameInfo=ref(false);
+// const { gameInfoOk,gameInfo,getGameInfo }=await useGameInfo();
 const note=useNote();
 const selectedRowNote=useSelectedRowNote();
-const { t } = useI18n();
+// const { t } = useI18n();
 const { isNotDesktop }=useDevice();
-const route =useRoute();
+// const route =useRoute();
 const { isFixedRow } = useFixedRow();
-const showModal=useShowModal();
-const modalType=useModalType();
+// const showModal=useShowModal();
+// const modalType=useModalType();
 const gameChecked=useGameChecked();
+
+onMounted(()=>{
+
+})
 
 const addEmptyNote=()=>{
     note.value.noteRows=[...note.value.noteRows,structuredClone(EMPTY_NOTE_ROW)];
     selectedRowNote.value=note.value.noteRows.length-1;
 }
 
-const getInfo=async ()=>{
-    pendingGameInfo.value=true;
-    await getGameInfo(gameCode.value)
-    pendingGameInfo.value=false;
-    gameCode.value='';
-}
+// const getInfo=async ()=>{
+//     pendingGameInfo.value=true;
+//     await getGameInfo(gameCode.value)
+//     pendingGameInfo.value=false;
+//     gameCode.value='';
+// }
 
-const buttonLabel=computed(()=>{
-    if(gameInfoOk.value === null || gameCode.value.length>0)
-        return t('getInfo')
-    return gameInfoOk.value?t('ok'):t('ko')
-})
+// const buttonLabel=computed(()=>{
+//     if(gameInfoOk.value === null || gameCode.value.length>0)
+//         return t('getInfo')
+//     return gameInfoOk.value?t('ok'):t('ko')
+// })
 
-if(route.query.code){
-    gameCode.value=route.query.code as string;
-    await getInfo();
-}
+// if(route.query.code){
+//     gameCode.value=route.query.code as string;
+//     await getInfo();
+// }
 
 </script>
 

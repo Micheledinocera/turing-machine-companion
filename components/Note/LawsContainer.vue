@@ -1,25 +1,33 @@
 <template>
     <div :class="['laws-container','mode_'+gameInfo?.m]">
-        <template v-if="!gameInfoOk">
-            <div class="law-item" v-for="(law,lawIndex) in note.laws">
-                <div class="key"> {{ law.key }} </div>
-                <div class="text-container">
-                    <input type="text" v-model="inputValues[lawIndex]">
-                    <div :class="['add',{inactive:inactiveAdd(lawIndex)}]" @click="()=>addCondition(lawIndex)"> + </div>
+        <!-- <template v-if="!gameInfoOk"> -->
+        <div class="law-item" v-for="(law,lawIndex) in note.laws">
+            <div class="key"> {{ law.key }} </div>
+            <div class="text-container">
+                <input type="number" v-model="inputValues[lawIndex]">
+                <div :class="['add',{inactive:inactiveAdd(lawIndex)}]" @click="()=>addCondition(lawIndex)"> + </div>
+            </div>
+            <template v-if="note.laws[lawIndex].possibilities.length>0">
+                <div class="label-container">
+                    <div class="key"> {{ law.key }} </div>
+                    <!-- <div class="law-id"> {{ gameInfo?.ind[lawIndex] }} </div> -->
+                    <!-- <div :class="['rule-id','color_'+gameInfo?.color]">
+                        {{ gameInfo?.crypt[lawIndex] }} 
+                        <div class="icon"></div> 
+                    </div> -->
                 </div>
-                <div class="conditions-container">
-                    <div class="condition-container" v-for="(possibility,possibilityIndex) in law.possibilities">
-                        <div class="remove" @click="()=>removeCondition(lawIndex,possibilityIndex)"> - </div>
-                        <div :class="['condition',{inactive:!possibility.active}]" @click="()=>toggleActive(lawIndex,possibilityIndex)"> {{possibility.value}} </div>
+                <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[lawIndex]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
+                    <img :src="getLawImageUrlLocale(parseInt(inputValues[lawIndex]))" :alt="'law_card_'+law" />
+                </div>
+                <div class="conditions-container with-imgs">
+                    <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in note.laws[lawIndex].possibilities">
+                        <img :class="['condition']" :src="getImageUrlLocale(possibility.value)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
                     </div>
                 </div>
-                <div class="possibility-container" v-if="activePossibilities(lawIndex).length==1"> 
-                    <div class="check"> </div>
-                    <div class="value"> {{ activePossibilities(lawIndex)[0].value }} </div>
-                </div>
-            </div>
-        </template>
-        <template v-else>
+            </template>
+        </div>
+        <!-- </template> -->
+        <!-- <template v-else>
             <template v-if="gameInfo?.m==gameModes.classic">
                 <div class="law-item" v-for="(law,lawIndex) in note.laws">
                     <div class="label-container">
@@ -75,7 +83,6 @@
                         <div class="label-container">
                             <div class="labels">
                                 <LabelItem :value="Object.keys(LawType)[law]" v-for="(law) in arrayFromZeroToNumber(gameInfo?.ind.length)"/>
-                                <!-- <div :class="['label',{inactive:inactive}]" v-for="(law) in arrayFromZeroToNumber(gameInfo?.ind.length)" @click="()=>inactive=!inactive"> {{ Object.keys(LawType)[law] }} </div> -->
                             </div>
                             <div class="law-id"> {{ gameInfo?.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)] }} </div>
                         </div>
@@ -90,7 +97,7 @@
                     </div>
                 </div>
             </template>
-        </template>
+        </template> -->
     </div>
 </template>
 
@@ -105,8 +112,15 @@ const inputValues=ref(Object.values(LawType).map(()=>""));
 const { locale }= useI18n();
 
 const addCondition=(lawIndex:number)=>{
-    note.value.laws[lawIndex].possibilities.push({value:inputValues.value[lawIndex],active:true});
-    inputValues.value[lawIndex]='';
+    // note.value.laws[lawIndex].possibilities.push({value:inputValues.value[lawIndex],active:true});
+    // inputValues.value[lawIndex]='';
+    note.value.laws[lawIndex].possibilities=[];
+    setTimeout(()=>{
+        note.value.laws[lawIndex].possibilities=LAWS_VERIFICATORS[parseInt(inputValues.value[lawIndex])].map((item)=>({
+            value:item+"",
+            active:true
+        }))
+    },100)
 }
 
 const removeCondition=(lawIndex:number,possibilityIndex:number)=>{
