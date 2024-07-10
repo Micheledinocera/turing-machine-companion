@@ -16,7 +16,7 @@ fs.readFile('public/metadata.json',(err,content) => {
         metadata.buildMinor = 0;
         metadata.buildMajor ++;
     } else {
-        console.log('che cazzo fai')
+        console.log('che cazzo fai ' + option)
         return
     }
     fs.writeFile('public/metadata.json',JSON.stringify(metadata),(err)=>{
