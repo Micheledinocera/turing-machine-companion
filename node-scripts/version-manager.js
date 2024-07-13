@@ -1,3 +1,4 @@
+// npm run version -- --major
 const {exec} = require('node:child_process');
 const option = process.argv.filter(item=>item.startsWith('--')).map(item=> item.substring(2))[0];
 
