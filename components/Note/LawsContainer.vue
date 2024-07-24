@@ -1,23 +1,23 @@
 <template>
     <div :class="['laws-container','mode_'+gameInfo?.m]">
-        <template v-if="gameDifficulty==gameModes.classic">
-        <div class="law-item" v-for="(law,lawIndex) in note.laws">
-            <div class="key"> {{ law.key }} </div>
-            <div class="text-container">
-                <input type="number" min="1" max="48" v-model="inputValues[lawIndex]">
-                <div :class="['add',{inactive:inactiveAdd(lawIndex)}]" @click="()=>addConditionClassic(lawIndex)"> + </div>
-            </div>
-            <template v-if="note.laws[lawIndex].possibilities.length>0">
-                <div class="law-container" @click="()=>{selectedCard=parseInt(inputValues[lawIndex]);showModal=true;modalType=MODAL_TYPES.cardDetail;}">
-                    <img :src="getLawImageUrlLocale(parseInt(inputValues[lawIndex]))" :alt="'law_card_'+law" />
+        <template v-if="gameDifficulty==gameModes.classic || gameDifficulty==gameModes.nightmare">
+            <div class="law-item" v-for="(law,lawIndex) in note.laws">
+                <div class="key"> {{ law.key }} </div>
+                <div class="text-container">
+                    <input type="number" min="1" max="48" v-model="inputValues[lawIndex]">
+                    <div :class="['add',{inactive:inactiveAdd(lawIndex)}]" @click="()=>addConditionClassic(lawIndex)"> + </div>
                 </div>
-                <div class="conditions-container with-imgs">
-                    <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in note.laws[lawIndex].possibilities">
-                        <img :class="['condition']" :src="getImageUrlLocale(possibility.value)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
+                <template v-if="note.laws[lawIndex].possibilities.length>0">
+                    <div class="law-container" @click="()=>{selectedCard=parseInt(inputValues[lawIndex]);showModal=true;modalType=MODAL_TYPES.cardDetail;}">
+                        <img :src="getLawImageUrlLocale(parseInt(inputValues[lawIndex]))" :alt="'law_card_'+law" />
                     </div>
-                </div>
-            </template>
-        </div>
+                    <div class="conditions-container with-imgs">
+                        <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in note.laws[lawIndex].possibilities">
+                            <img :class="['condition']" :src="getImageUrlLocale(possibility.value)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
+                        </div>
+                    </div>
+                </template>
+            </div>
         </template>
         <template v-else-if="gameDifficulty==gameModes.extreme">
             <div class="law-item" v-for="(law,lawIndex) in note.laws">
@@ -39,35 +39,6 @@
                 </template>
             </div>
         </template>
-        <!-- <template v-else-if="gameInfo?.m==gameModes.nightmare">
-            <div class="labels-container">
-                <div class="label-container" v-for="(law,lawIndex) in arrayFromZeroToNumber(gameInfo?.ind.length)">
-                    <div class="key"> {{ Object.keys(LawType)[lawIndex] }} </div>
-                    <div :class="['rule-id','color_'+gameInfo?.color]">
-                        {{ gameInfo?.crypt[lawIndex] }} 
-                        <div class="icon"></div> 
-                    </div>
-                </div>
-            </div>
-            <div class="law-items">
-                <div class="law-item" v-for="(law,lawIndex) in note.laws">
-                    <div class="label-container">
-                        <div class="labels">
-                            <LabelItem :value="Object.keys(LawType)[law]" v-for="(law) in arrayFromZeroToNumber(gameInfo?.ind.length)"/>
-                        </div>
-                        <div class="law-id"> {{ gameInfo?.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)] }} </div>
-                    </div>
-                    <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
-                        <img :src="getLawImageUrlLocale(gameInfo.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)])" :alt="'law_card_'+law" />
-                    </div>
-                    <div class="conditions-container with-imgs">
-                        <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[gameInfo?.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)]]">
-                            <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </template> -->
     </div>
 </template>
 
