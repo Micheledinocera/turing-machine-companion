@@ -53,7 +53,8 @@
             </template>
             <template v-else-if="modalType==MODAL_TYPES.checkCode">
                 <div class="title"> {{$t('checkCode')}} </div>
-                <div :class="['response',gameInfo?.code==getCodeFromNote?'ok':'ko']"> {{gameInfo?.code==getCodeFromNote?$t('correctSolution'):$t('wrongSolution')}}</div>
+                <div :class="['response','ok']"> {{$t('yourCode')}} {{ getCodeFromNote }}</div>
+                <div :class="['response','ok']"> {{$t('guessNumber')}} {{ guessNumber }}</div>
                 <div class="buttons">
                     <div class="ok" @click="()=>newGame()"> {{$t('newGame')}} </div>
                 </div>
@@ -68,7 +69,7 @@ const showModal=useShowModal();
 const modalType=useModalType();
 const selectedCard=useSelectedCard();
 const selectedRowNote=useSelectedRowNote();
-const note=useNote();
+const note=useNote()
 const version=await useVersion();
 const { createGameAction,gameInfoOk,gameInfo }=await useGameInfo();
 const { locale }= useI18n();

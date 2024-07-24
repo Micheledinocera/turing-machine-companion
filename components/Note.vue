@@ -34,17 +34,10 @@
 
 <script setup lang="ts">
 
-// const gameCode=ref("");
-// const pendingGameInfo=ref(false);
-// const { gameInfoOk,gameInfo,getGameInfo }=await useGameInfo();
 const note=useNote();
 const selectedRowNote=useSelectedRowNote();
-// const { t } = useI18n();
 const { isNotDesktop }=useDevice();
-// const route =useRoute();
 const { isFixedRow } = useFixedRow();
-// const showModal=useShowModal();
-// const modalType=useModalType();
 const gameChecked=useGameChecked();
 
 onMounted(()=>{

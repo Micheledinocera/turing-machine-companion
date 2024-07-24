@@ -1,30 +1,65 @@
 <template>
     <div class="header">
-        <select v-model="$i18n.locale">
-            <option v-for="language in LANGUAGES" :value="language.iso"> {{ language.label }} </option>
-        </select> 
         <div class="info" @click="()=>{showModal=true;modalType=MODAL_TYPES.credits}"/>
         <div class="refresh" @click="()=>{showModal=true;modalType=MODAL_TYPES.newGame}"/>
         <div class="logo">
             <div class="companion"> COMPANION </div>
         </div>
+        <div class="select-container">
+            <select class="game-mode" v-model="gameDifficulty" @change="newGame">
+                <option v-for="gameMode in gameModes" :value="gameMode"> {{ $t(gameModeLabel(gameMode)) }} </option>
+            </select> 
+            <select v-model="$i18n.locale">
+                <option v-for="language in LANGUAGES" :value="language.iso"> {{ language.label }} </option>
+            </select> 
+        </div>
     </div>
 </template>
 
 <script setup lang="ts">
+import { gameModes } from '#imports';
+
 const showModal=useShowModal();
 const modalType=useModalType();
+const gameDifficulty=useGameDifficulty();
+const note=useNote();
+const selectedRowNote=useSelectedRowNote();
+
+const gameModeLabel=(gameMode:gameModes) :string=>{
+    if(gameMode===gameModes.classic)
+        return "classic"
+    if(gameMode===gameModes.extreme)
+        return "extreme"
+    if(gameMode===gameModes.nightmare)
+        return "nightmare"
+    return ""
+}
+   
+const newGame=()=>{
+    note.value=structuredClone(EMPTY_NOTE);
+    selectedRowNote.value=0;
+}
+
 </script>
 
 <style scoped lang="sass">
 .header
     @include header-row
     display: flex
-    select
+    .select-container
         position: absolute
         right: 10px
-        border: none
-        cursor: pointer
+        display: flex
+        @media (max-width: $breakpoint-mobile)
+            flex-wrap: wrap
+            width: 22%
+            select.game-mode
+                margin-bottom: 10px
+        select
+            border: none
+            cursor: pointer
+            &.game-mode
+                margin-right: 10px
     .logo
         @include background-standard
         background-image: url('~/assets/imgs/logo.png')

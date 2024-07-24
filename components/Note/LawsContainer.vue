@@ -1,22 +1,14 @@
 <template>
     <div :class="['laws-container','mode_'+gameInfo?.m]">
-        <!-- <template v-if="!gameInfoOk"> -->
+        <template v-if="gameDifficulty==gameModes.classic">
         <div class="law-item" v-for="(law,lawIndex) in note.laws">
             <div class="key"> {{ law.key }} </div>
             <div class="text-container">
-                <input type="number" v-model="inputValues[lawIndex]">
-                <div :class="['add',{inactive:inactiveAdd(lawIndex)}]" @click="()=>addCondition(lawIndex)"> + </div>
+                <input type="number" min="1" max="48" v-model="inputValues[lawIndex]">
+                <div :class="['add',{inactive:inactiveAdd(lawIndex)}]" @click="()=>addConditionClassic(lawIndex)"> + </div>
             </div>
             <template v-if="note.laws[lawIndex].possibilities.length>0">
-                <div class="label-container">
-                    <div class="key"> {{ law.key }} </div>
-                    <!-- <div class="law-id"> {{ gameInfo?.ind[lawIndex] }} </div> -->
-                    <!-- <div :class="['rule-id','color_'+gameInfo?.color]">
-                        {{ gameInfo?.crypt[lawIndex] }} 
-                        <div class="icon"></div> 
-                    </div> -->
-                </div>
-                <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[lawIndex]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
+                <div class="law-container" @click="()=>{selectedCard=parseInt(inputValues[lawIndex]);showModal=true;modalType=MODAL_TYPES.cardDetail;}">
                     <img :src="getLawImageUrlLocale(parseInt(inputValues[lawIndex]))" :alt="'law_card_'+law" />
                 </div>
                 <div class="conditions-container with-imgs">
@@ -26,77 +18,55 @@
                 </div>
             </template>
         </div>
-        <!-- </template> -->
-        <!-- <template v-else>
-            <template v-if="gameInfo?.m==gameModes.classic">
-                <div class="law-item" v-for="(law,lawIndex) in note.laws">
-                    <div class="label-container">
-                        <div class="key"> {{ law.key }} </div>
-                        <div class="law-id"> {{ gameInfo?.ind[lawIndex] }} </div>
-                        <div :class="['rule-id','color_'+gameInfo?.color]">
-                            {{ gameInfo?.crypt[lawIndex] }} 
-                            <div class="icon"></div> 
-                        </div>
-                    </div>
-                    <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[lawIndex]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
-                        <img :src="getLawImageUrlLocale(gameInfo.ind[lawIndex])" :alt="'law_card_'+law" />
-                    </div>
-                    <div class="conditions-container with-imgs">
-                        <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[gameInfo.ind[lawIndex]]">
-                            <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
-                        </div>
-                    </div>
+        </template>
+        <template v-else-if="gameDifficulty==gameModes.extreme">
+            <div class="law-item" v-for="(law,lawIndex) in note.laws">
+                <div class="key"> {{ law.key }} </div>
+                <div class="text-container">
+                    <input type="number" min="1" max="48" v-model="inputValues[lawIndex]">
+                    <div v-if="extremeArrays[lawIndex].length<2" :class="['add',{inactive:inactiveAdd(lawIndex)}]" @click="()=>addConditionExtreme(lawIndex)"> + </div>
                 </div>
-            </template>
-            <template v-else-if="gameInfo?.m==gameModes.extreme">
-                <div class="law-item" v-for="(law,lawIndex) in note.laws">
-                    <div class="label-container">
-                        <div class="key"> {{ law.key }} </div>
-                        <div class="law-id" v-for="ind in extremeArrays(lawIndex).inds"> {{ ind }} </div>
-                        <div :class="['rule-id','color_'+gameInfo?.color]">
-                            {{ gameInfo?.crypt[lawIndex] }} 
-                            <div class="icon"></div> 
-                        </div>
-                    </div>
-                    <div class="law-container" v-for="ind in extremeArrays(lawIndex).inds" @click="()=>{selectedCard=ind??1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
-                        <img :src="getLawImageUrlLocale(ind??1)" :alt="'law_card_'+ind" />
+                <template v-if="note.laws[lawIndex].possibilities.length>0">
+                    <div class="law-container" v-for="(str,ind) in extremeArrays[lawIndex]" @click="()=>{selectedCard=parseInt(inputValues[lawIndex]);showModal=true;modalType=MODAL_TYPES.cardDetail;}">
+                        <div :class="['remove']" @click.stop="()=>removeConditionExtreme(lawIndex,ind)"> - </div>
+                        <img :src="getLawImageUrlLocale(parseInt(extremeArrays[lawIndex][ind]))" :alt="'law_card_'+parseInt(extremeArrays[lawIndex][ind])" />
                     </div>
                     <div class="conditions-container with-imgs">
                         <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in law.possibilities">
                             <img :class="['condition']" :src="getImageUrlLocale(possibility.value)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
                         </div>
                     </div>
+                </template>
+            </div>
+        </template>
+        <!-- <template v-else-if="gameInfo?.m==gameModes.nightmare">
+            <div class="labels-container">
+                <div class="label-container" v-for="(law,lawIndex) in arrayFromZeroToNumber(gameInfo?.ind.length)">
+                    <div class="key"> {{ Object.keys(LawType)[lawIndex] }} </div>
+                    <div :class="['rule-id','color_'+gameInfo?.color]">
+                        {{ gameInfo?.crypt[lawIndex] }} 
+                        <div class="icon"></div> 
+                    </div>
                 </div>
-            </template>
-            <template v-else-if="gameInfo?.m==gameModes.nightmare">
-                <div class="labels-container">
-                    <div class="label-container" v-for="(law,lawIndex) in arrayFromZeroToNumber(gameInfo?.ind.length)">
-                        <div class="key"> {{ Object.keys(LawType)[lawIndex] }} </div>
-                        <div :class="['rule-id','color_'+gameInfo?.color]">
-                            {{ gameInfo?.crypt[lawIndex] }} 
-                            <div class="icon"></div> 
+            </div>
+            <div class="law-items">
+                <div class="law-item" v-for="(law,lawIndex) in note.laws">
+                    <div class="label-container">
+                        <div class="labels">
+                            <LabelItem :value="Object.keys(LawType)[law]" v-for="(law) in arrayFromZeroToNumber(gameInfo?.ind.length)"/>
+                        </div>
+                        <div class="law-id"> {{ gameInfo?.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)] }} </div>
+                    </div>
+                    <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
+                        <img :src="getLawImageUrlLocale(gameInfo.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)])" :alt="'law_card_'+law" />
+                    </div>
+                    <div class="conditions-container with-imgs">
+                        <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[gameInfo?.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)]]">
+                            <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
                         </div>
                     </div>
                 </div>
-                <div class="law-items">
-                    <div class="law-item" v-for="(law,lawIndex) in note.laws">
-                        <div class="label-container">
-                            <div class="labels">
-                                <LabelItem :value="Object.keys(LawType)[law]" v-for="(law) in arrayFromZeroToNumber(gameInfo?.ind.length)"/>
-                            </div>
-                            <div class="law-id"> {{ gameInfo?.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)] }} </div>
-                        </div>
-                        <div class="law-container" @click="()=>{selectedCard=gameInfo?gameInfo.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)]:1;showModal=true;modalType=MODAL_TYPES.cardDetail;}">
-                            <img :src="getLawImageUrlLocale(gameInfo.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)])" :alt="'law_card_'+law" />
-                        </div>
-                        <div class="conditions-container with-imgs">
-                            <div :class="['condition-container',{definitive:activePossibilities(lawIndex).length==1},{inactive:!law.possibilities[possibilityIndex]?.active}]" v-for="(possibility,possibilityIndex) in LAWS_VERIFICATORS[gameInfo?.ind[Object.values(LawType).findIndex(lawType=>lawType==law.key)]]">
-                                <img :class="['condition']" :src="getImageUrlLocale(possibility)" :alt="'law_image_'+$i18n.locale+'_'+possibility" @click="()=>toggleActive(lawIndex,possibilityIndex)" />
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </template>
+            </div>
         </template> -->
     </div>
 </template>
@@ -106,14 +76,14 @@ const showModal=useShowModal();
 const modalType=useModalType();
 const selectedCard=useSelectedCard();
 const note=useNote();
-const { gameInfoOk,gameInfo }=await useGameInfo();
+const gameDifficulty=useGameDifficulty();
+const { gameInfo }=await useGameInfo();
 const randoms=useRandoms();
 const inputValues=ref(Object.values(LawType).map(()=>""));
+const extremeArrays=ref(Object.values(LawType).map(()=>[])) as Ref<string[][]>;
 const { locale }= useI18n();
 
-const addCondition=(lawIndex:number)=>{
-    // note.value.laws[lawIndex].possibilities.push({value:inputValues.value[lawIndex],active:true});
-    // inputValues.value[lawIndex]='';
+const addConditionClassic=(lawIndex:number)=>{
     note.value.laws[lawIndex].possibilities=[];
     setTimeout(()=>{
         note.value.laws[lawIndex].possibilities=LAWS_VERIFICATORS[parseInt(inputValues.value[lawIndex])].map((item)=>({
@@ -123,8 +93,34 @@ const addCondition=(lawIndex:number)=>{
     },100)
 }
 
+const addConditionExtreme=(lawIndex:number)=>{
+    note.value.laws[lawIndex].possibilities=[];
+    extremeArrays.value[lawIndex].push(inputValues.value[lawIndex])
+    setTimeout(()=>{
+        extremeArrays.value[lawIndex].forEach(extremeIndex=>{
+            note.value.laws[lawIndex].possibilities.push(...LAWS_VERIFICATORS[parseInt(extremeIndex)].map((item)=>({
+                value:item+"",
+                active:true
+            })))
+        })
+    },100)
+}
+
 const removeCondition=(lawIndex:number,possibilityIndex:number)=>{
     note.value.laws[lawIndex].possibilities.splice(possibilityIndex,1);
+}
+
+const removeConditionExtreme=(lawIndex:number,possibilityIndex:number)=>{
+    note.value.laws[lawIndex].possibilities=[];
+    extremeArrays.value[lawIndex].splice(possibilityIndex,1)
+    setTimeout(()=>{
+        extremeArrays.value[lawIndex].forEach(extremeIndex=>{
+            note.value.laws[lawIndex].possibilities.push(...LAWS_VERIFICATORS[parseInt(extremeIndex)].map((item)=>({
+                value:item+"",
+                active:true
+            })))
+        })
+    },100)
 }
 
 const toggleActive=(lawIndex:number,possibilityIndex:number)=>{
@@ -152,18 +148,20 @@ const getLawImageUrlLocale=(lawId:number)=>{
     return LAW_IMG_URL.replaceAll('{locale}',localeValue.toUpperCase()).replace('{lawId}',lawIdString)
 }
 
-const extremeArrays=(lawIndex:number)=>{
-    var inds=[gameInfo.value?.ind[lawIndex],gameInfo.value?.fake[lawIndex]];
-    return {
-        inds:[inds[randoms.value[lawIndex]],inds[1-randoms.value[lawIndex]]]
-    }
-}
+// const extremeArrays=(lawIndex:number)=>{
+//     var inds=[gameInfo.value?.ind[lawIndex],gameInfo.value?.fake[lawIndex]];
+//     return {
+//         inds:[inds[randoms.value[lawIndex]],inds[1-randoms.value[lawIndex]]]
+//     }
+// }
 
 </script>
 
 <style scoped lang="sass">
 $item-height:20px
 $small-item-height:12px
+$medium-item-height:24px
+
 .laws-container
     margin-top: 20px
     width: calc($right-width - 80px)
@@ -173,6 +171,11 @@ $small-item-height:12px
     @media (max-width: $breakpoint-tablet)
         width: calc(100% - 40px)
         padding: 0 20px
+    .key
+        text-align: center
+        font-weight: 700
+        color: $primary-color
+        font-size: 20px
     .law-item
         width: calc(100%/3 - 8px)
         margin: 10px auto
@@ -189,6 +192,17 @@ $small-item-height:12px
                 width: calc(100% + 26px)
                 object-fit: cover
                 object-position: -12px -14px
+            .remove
+                position: absolute
+                height: $medium-item-height
+                border-radius: 20px
+                color: white
+                font-weight: 600
+                font-size: $medium-item-height
+                background-color: $red
+                width: $medium-item-height
+                cursor: pointer
+                text-align: center
     .label-container
         display: flex
         padding: 10px
@@ -197,11 +211,6 @@ $small-item-height:12px
             font-weight: 700
             padding: 4px 8px
             border-radius: 6px
-        .key
-            text-align: center
-            font-weight: 700
-            color: $primary-color
-            font-size: 20px
         .law-id
             background-color: $primary-color
             color: white
@@ -287,16 +296,6 @@ $small-item-height:12px
             line-height: $small-item-height
             margin-top: 10px
             padding: 6px 2px
-            .remove
-                height: $small-item-height
-                border-radius: 20px
-                color: white
-                font-weight: 600
-                font-size: $small-item-height
-                background-color: $red
-                width: $small-item-height
-                cursor: pointer
-                text-align: center
             .condition
                 width: calc(100% - 30px)
                 margin-left: 10px

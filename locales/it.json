@@ -19,9 +19,9 @@
     "createGame":"Crea Partita",
     "or":"Oppure",
     "mode":"Modalità",
-    "classic":"classico",
-    "extreme":"estremo",
-    "nightmare":"incubo",
+    "classic":"Classico",
+    "extreme":"Estremo",
+    "nightmare":"Incubo",
     "difficulty":"Difficoltà",
     "easy":"facile",
     "normal":"normale",
@@ -31,6 +31,8 @@
     "areYouSure":"Sei Sicuro?",
     "correctSolution":"Soluzione Corretta!",
     "wrongSolution":"Soluzione Errata!",
+    "yourCode":"La tua soluzione è: ",
+    "guessNumber":"Numero di controlli fatti: ",
     "somethingWentWrong":"Qualcosa è andato storto",
     "share":"Condividi Gioco"
 }

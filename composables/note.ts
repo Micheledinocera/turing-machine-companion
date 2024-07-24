@@ -48,3 +48,8 @@ export const EMPTY_NOTE={
 
 export const useNote = () => useState<Note>('note',()=>structuredClone(EMPTY_NOTE))
 export const useSelectedRowNote = () => useState<number>('selectedRowNote',()=>0)
+export const guessNumber = computed(()=>{
+    let result=0;
+    useNote().value.noteRows.forEach(noteRow=>result+=noteRow.verificators.filter(verificator=>verificator===true || verificator===false).length)
+    return result
+})
